@@ -1,0 +1,16 @@
+{
+  "name": "দোকানম্যান (Dokanman)",
+  "short_name": "দোকানম্যান",
+  "description": "টং ও দোকানের ডিজিটাল বাকির খাতা ও সেলস কাউন্টার",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#f59e0b",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
