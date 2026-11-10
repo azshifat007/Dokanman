@@ -119,16 +119,16 @@ export function CartPanel() {
   };
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-zinc-900/60 ring-1 ring-white/5 shadow-xl shadow-black/20">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white dark:bg-zinc-900/60 ring-1 ring-black/5 dark:ring-white/5 shadow-xl shadow-black/20">
       {/* Panel Top Header */}
-      <div className="flex items-center justify-between border-b border-white/5 bg-black/20 p-4">
+      <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 bg-black/[0.03] dark:bg-black/20 p-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/20">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/20">
             <Receipt className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-bold text-white text-sm">{t("activeCart")}</h3>
-            <span className="text-[11px] text-zinc-400">
+            <h3 className="font-bold text-zinc-900 dark:text-white text-sm">{t("activeCart")}</h3>
+            <span className="text-[11px] text-zinc-600 dark:text-zinc-400">
               {items.length > 0
                 ? `${items.length} ${lang === "bn" ? "টি আইটেম যুক্ত আছে" : "items in cart"}`
                 : lang === "bn" ? "কোনো আইটেম নেই" : "No items added"}
@@ -139,7 +139,7 @@ export function CartPanel() {
         {items.length > 0 && (
           <button
             onClick={clearCart}
-            className="flex items-center gap-1 text-xs text-zinc-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
+            className="flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
             title={t("clearCart")}
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -150,29 +150,29 @@ export function CartPanel() {
 
       {/* Notifications */}
       {successMessage && (
-        <div className="m-3 p-3 bg-emerald-950/60 border border-emerald-700/60 text-emerald-300 rounded-2xl text-xs flex items-center gap-2 animate-in slide-in-from-top-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="m-3 p-3 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-300 rounded-2xl text-xs flex items-center gap-2 animate-in slide-in-from-top-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-400 shrink-0" />
           <span className="font-semibold">{successMessage}</span>
         </div>
       )}
 
       {errorMessage && (
-        <div className="m-3 p-3 bg-rose-950/60 border border-rose-700/60 text-rose-300 rounded-2xl text-xs flex items-center gap-2 animate-in slide-in-from-top-2">
-          <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+        <div className="m-3 p-3 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-700/60 text-rose-600 dark:text-rose-300 rounded-2xl text-xs flex items-center gap-2 animate-in slide-in-from-top-2">
+          <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       {/* Customer Status Banner if selected */}
       {selectedCustomer && (
-        <div className="flex items-center justify-between border-b border-white/5 bg-white/[0.03] px-4 py-2.5 text-xs">
-          <div className="flex items-center gap-1.5 text-zinc-300">
-            <span className="text-zinc-400">{lang === "bn" ? "খাতাদার:" : "Customer:"}</span>
-            <span className="font-bold text-amber-400">{selectedCustomer.name}</span>
+        <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 bg-black/[0.03] dark:bg-white/[0.03] px-4 py-2.5 text-xs">
+          <div className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300">
+            <span className="text-zinc-600 dark:text-zinc-400">{lang === "bn" ? "খাতাদার:" : "Customer:"}</span>
+            <span className="font-bold text-amber-700 dark:text-amber-400">{selectedCustomer.name}</span>
           </div>
-          <div className="flex items-center gap-1 text-zinc-300">
-            <span className="text-zinc-400">{lang === "bn" ? "পূর্বের বাকি:" : "Prev Due:"}</span>
-            <span className="font-bold text-rose-400 font-mono">
+          <div className="flex items-center gap-1 text-zinc-700 dark:text-zinc-300">
+            <span className="text-zinc-600 dark:text-zinc-400">{lang === "bn" ? "পূর্বের বাকি:" : "Prev Due:"}</span>
+            <span className="font-bold text-rose-600 dark:text-rose-400 font-mono">
               {formatCurrency(prevDue)}
             </span>
           </div>
@@ -183,36 +183,36 @@ export function CartPanel() {
       <div className="flex-1 overflow-y-auto p-4 space-y-2.5 max-h-[340px]">
         {items.length === 0 ? (
           <div className="py-12 text-center flex flex-col items-center justify-center text-zinc-500">
-            <Receipt className="w-10 h-10 mb-2 stroke-[1.5] text-zinc-600" />
-            <p className="text-sm font-semibold text-zinc-400">{t("emptyCartTitle")}</p>
-            <p className="text-xs text-zinc-600 max-w-xs mt-1">{t("emptyCartDesc")}</p>
+            <Receipt className="w-10 h-10 mb-2 stroke-[1.5] text-zinc-500 dark:text-zinc-600" />
+            <p className="text-sm font-semibold text-zinc-600 dark:text-zinc-400">{t("emptyCartTitle")}</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-600 max-w-xs mt-1">{t("emptyCartDesc")}</p>
           </div>
         ) : (
           items.map((item) => (
             <div
               key={item.productId}
-              className="group flex items-center justify-between rounded-xl bg-white/[0.03] p-2.5 text-xs ring-1 ring-white/5"
+              className="group flex items-center justify-between rounded-xl bg-black/[0.03] dark:bg-white/[0.03] p-2.5 text-xs ring-1 ring-black/5 dark:ring-white/5"
             >
               <div className="flex-1 min-w-0 pr-2">
-                <div className="font-bold text-white truncate text-xs sm:text-sm">
+                <div className="font-bold text-zinc-900 dark:text-white truncate text-xs sm:text-sm">
                   {item.productName}
                 </div>
-                <div className="text-zinc-400 font-mono text-[11px]">
+                <div className="text-zinc-600 dark:text-zinc-400 font-mono text-[11px]">
                   {formatCurrency(item.unitPrice)} × {item.quantity} ={" "}
-                  <span className="text-amber-400 font-bold">{formatCurrency(item.subtotal)}</span>
+                  <span className="text-amber-700 dark:text-amber-400 font-bold">{formatCurrency(item.subtotal)}</span>
                 </div>
               </div>
 
               {/* Stepper (+ / -) */}
-              <div className="flex items-center gap-1.5 bg-zinc-900/90 p-1 rounded-xl border border-zinc-700">
+              <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-900/90 p-1 rounded-xl border border-zinc-300 dark:border-zinc-700">
                 <button
                   type="button"
                   onClick={() => updateQuantity(item.productId, -1)}
-                  className="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center active:scale-95 transition-transform"
+                  className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center active:scale-95 transition-transform"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="w-6 text-center font-bold text-white font-mono text-sm">
+                <span className="w-6 text-center font-bold text-zinc-900 dark:text-white font-mono text-sm">
                   {item.quantity}
                 </span>
                 <button
@@ -228,7 +228,7 @@ export function CartPanel() {
               <button
                 type="button"
                 onClick={() => removeItem(item.productId)}
-                className="ml-2 p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-zinc-800 transition-colors"
+                className="ml-2 p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                 title="মুছে ফেলুন"
               >
                 <Trash2 className="w-4 h-4" />
@@ -239,8 +239,8 @@ export function CartPanel() {
 
         {/* Quick Custom Item Row */}
         {showCustomItemRow ? (
-          <form onSubmit={handleAddCustomItem} className="p-2.5 bg-zinc-950/80 border border-zinc-700 rounded-2xl space-y-2">
-            <div className="text-[11px] font-semibold text-zinc-400">{t("customProductBtn")}</div>
+          <form onSubmit={handleAddCustomItem} className="p-2.5 bg-white/80 dark:bg-zinc-950/80 border border-zinc-300 dark:border-zinc-700 rounded-2xl space-y-2">
+            <div className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400">{t("customProductBtn")}</div>
             <div className="grid grid-cols-2 gap-2">
               <input
                 type="text"
@@ -248,21 +248,21 @@ export function CartPanel() {
                 placeholder={t("customProductName")}
                 value={customItemName}
                 onChange={(e) => setCustomItemName(e.target.value)}
-                className="px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-xs placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                className="px-2.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-xs placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
               />
               <input
                 type="number"
                 placeholder={t("customProductPrice")}
                 value={customItemPrice}
                 onChange={(e) => setCustomItemPrice(e.target.value)}
-                className="px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-xs font-mono placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                className="px-2.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-xs font-mono placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
               />
             </div>
             <div className="flex justify-end gap-1.5">
               <button
                 type="button"
                 onClick={() => setShowCustomItemRow(false)}
-                className="px-2.5 py-1 rounded-lg text-[11px] text-zinc-400 hover:bg-zinc-800"
+                className="px-2.5 py-1 rounded-lg text-[11px] text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
               >
                 {t("cancel")}
               </button>
@@ -278,34 +278,34 @@ export function CartPanel() {
           <button
             type="button"
             onClick={() => setShowCustomItemRow(true)}
-            className="w-full py-2 border border-dashed border-zinc-800 hover:border-zinc-700 rounded-2xl text-xs text-zinc-400 hover:text-white flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full py-2 border border-dashed border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 rounded-2xl text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white flex items-center justify-center gap-1.5 transition-colors"
           >
-            <Plus className="w-3.5 h-3.5 text-amber-400" />
+            <Plus className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
             <span>{t("customProductBtn")}</span>
           </button>
         )}
       </div>
 
       {/* Bill Calculation & Settlement Section */}
-      <div className="space-y-3.5 border-t border-white/5 bg-black/20 p-4">
+      <div className="space-y-3.5 border-t border-black/5 dark:border-white/5 bg-black/[0.03] dark:bg-black/20 p-4">
         {/* Subtotal, Previous Due & Net Calculation */}
         <div className="space-y-1.5 text-xs">
-          <div className="flex justify-between text-zinc-300">
+          <div className="flex justify-between text-zinc-700 dark:text-zinc-300">
             <span>{t("orderTotal")}</span>
-            <span className="font-bold text-white text-sm font-mono">{formatCurrency(subtotal)}</span>
+            <span className="font-bold text-zinc-900 dark:text-white text-sm font-mono">{formatCurrency(subtotal)}</span>
           </div>
 
           {selectedCustomer && prevDue > 0 && (
-            <div className="flex justify-between text-zinc-400">
+            <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
               <span>{t("prevDue")}</span>
-              <span className="font-bold text-rose-400 font-mono">+ {formatCurrency(prevDue)}</span>
+              <span className="font-bold text-rose-600 dark:text-rose-400 font-mono">+ {formatCurrency(prevDue)}</span>
             </div>
           )}
 
           {selectedCustomer && (
-            <div className="flex justify-between text-zinc-300 pt-1 border-t border-zinc-800/80">
+            <div className="flex justify-between text-zinc-700 dark:text-zinc-300 pt-1 border-t border-zinc-200 dark:border-zinc-800/80">
               <span className="font-semibold">{t("newGrandBalance")}</span>
-              <span className="font-black text-amber-400 text-base font-mono">
+              <span className="font-black text-amber-700 dark:text-amber-400 text-base font-mono">
                 {formatCurrency(grandBalance)}
               </span>
             </div>
@@ -314,16 +314,16 @@ export function CartPanel() {
 
         {/* Payment Toggles: [নগদ] [বাকি] [আংশিক] */}
         <div>
-          <div className="text-[11px] font-semibold text-zinc-400 mb-1.5 flex items-center justify-between">
+          <div className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 flex items-center justify-between">
             <span>{t("paymentType")}</span>
             {paymentMode === "PAID" && (
-              <span className="text-emerald-400 font-bold">{t("payCash")}</span>
+              <span className="text-emerald-700 dark:text-emerald-400 font-bold">{t("payCash")}</span>
             )}
             {paymentMode === "DUE" && (
-              <span className="text-rose-400 font-bold">{t("payDue")}</span>
+              <span className="text-rose-600 dark:text-rose-400 font-bold">{t("payDue")}</span>
             )}
             {paymentMode === "PARTIAL" && (
-              <span className="text-amber-400 font-bold">{t("payPartial")}</span>
+              <span className="text-amber-700 dark:text-amber-400 font-bold">{t("payPartial")}</span>
             )}
           </div>
 
@@ -335,7 +335,7 @@ export function CartPanel() {
               className={`flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border font-bold text-xs transition-all active:scale-95 ${
                 paymentMode === "PAID"
                   ? "bg-emerald-500 text-zinc-950 border-emerald-400 shadow-lg shadow-emerald-500/20"
-                  : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                  : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-700"
               }`}
             >
               <Wallet className="w-4 h-4 mb-0.5" />
@@ -349,7 +349,7 @@ export function CartPanel() {
               className={`flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border font-bold text-xs transition-all active:scale-95 ${
                 paymentMode === "DUE"
                   ? "bg-rose-500 text-white border-rose-400 shadow-lg shadow-rose-500/20"
-                  : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                  : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-700"
               }`}
             >
               <Clock className="w-4 h-4 mb-0.5" />
@@ -368,7 +368,7 @@ export function CartPanel() {
               className={`flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border font-bold text-xs transition-all active:scale-95 ${
                 paymentMode === "PARTIAL"
                   ? "bg-amber-500 text-zinc-950 border-amber-400 shadow-lg shadow-amber-500/20"
-                  : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                  : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-700"
               }`}
             >
               <Coins className="w-4 h-4 mb-0.5" />
@@ -379,16 +379,16 @@ export function CartPanel() {
 
         {/* Partial payment input */}
         {paymentMode === "PARTIAL" && (
-          <div className="p-3 bg-zinc-900 border border-amber-500/40 rounded-2xl space-y-2 animate-in fade-in-50">
+          <div className="p-3 bg-white dark:bg-zinc-900 border border-amber-500/40 rounded-2xl space-y-2 animate-in fade-in-50">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-zinc-300 font-semibold">{t("partialPaidAmount")}</span>
-              <span className="text-rose-400 font-mono font-bold">
+              <span className="text-zinc-700 dark:text-zinc-300 font-semibold">{t("partialPaidAmount")}</span>
+              <span className="text-rose-600 dark:text-rose-400 font-mono font-bold">
                 {t("partialDueRemains")} {formatCurrency(due)}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
-                <span className="absolute left-3 top-2 text-zinc-400 font-mono font-bold">৳</span>
+                <span className="absolute left-3 top-2 text-zinc-600 dark:text-zinc-400 font-mono font-bold">৳</span>
                 <input
                   type="number"
                   min="0"
@@ -396,13 +396,13 @@ export function CartPanel() {
                   value={customPaidAmount || ""}
                   onChange={(e) => setCustomPaidAmount(parseFloat(e.target.value) || 0)}
                   placeholder="0.00"
-                  className="w-full pl-7 pr-3 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white font-mono font-bold text-sm focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-7 pr-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono font-bold text-sm focus:outline-hidden focus:border-amber-500"
                 />
               </div>
               <button
                 type="button"
                 onClick={() => setCustomPaidAmount(subtotal)}
-                className="px-2.5 py-1.5 rounded-xl bg-zinc-800 text-zinc-300 hover:text-white text-xs font-semibold"
+                className="px-2.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white text-xs font-semibold"
               >
                 {t("allPaid")}
               </button>
@@ -417,7 +417,7 @@ export function CartPanel() {
             value={orderNote}
             onChange={(e) => setOrderNote(e.target.value)}
             placeholder={`${t("orderNoteLabel")} — ${t("orderNotePlaceholder")}`}
-            className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-xs placeholder-zinc-600 focus:outline-hidden focus:border-amber-500"
+            className="w-full px-3 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-xs placeholder-zinc-600 focus:outline-hidden focus:border-amber-500"
           />
         </div>
 
@@ -428,7 +428,7 @@ export function CartPanel() {
           disabled={isSubmitting || items.length === 0}
           className={`w-full py-3.5 px-4 rounded-2xl font-black text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl transition-all active:scale-[0.98] select-none ${
             items.length === 0
-              ? "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50"
+              ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-300 dark:border-zinc-700/50"
               : paymentMode === "PAID"
               ? "bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-emerald-500/25"
               : paymentMode === "DUE"

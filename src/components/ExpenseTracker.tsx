@@ -105,18 +105,18 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
   return (
     <div className="space-y-4">
       {/* Top Banner */}
-      <div className="flex flex-col justify-between gap-3 rounded-2xl bg-zinc-900/60 p-4 shadow-xl shadow-black/20 ring-1 ring-white/5 sm:flex-row sm:items-center sm:p-5">
+      <div className="flex flex-col justify-between gap-3 rounded-2xl bg-white dark:bg-zinc-900/60 p-4 shadow-xl shadow-black/20 ring-1 ring-black/5 dark:ring-white/5 sm:flex-row sm:items-center sm:p-5">
         <div>
-          <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-amber-400" />
+          <h2 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+            <Receipt className="w-5 h-5 text-amber-700 dark:text-amber-400" />
             <span>{t("expenseTitle")}</span>
           </h2>
-          <p className="text-xs text-zinc-400 mt-0.5">{t("expenseSubtitle")}</p>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">{t("expenseSubtitle")}</p>
         </div>
 
-        <div className="flex items-center gap-2.5 self-start rounded-xl bg-black/30 px-4 py-2.5 ring-1 ring-white/5 sm:self-auto">
-          <span className="text-xs text-zinc-400">{t("expensesTodayOnly")}:</span>
-          <span className="text-lg font-black font-mono text-rose-400">
+        <div className="flex items-center gap-2.5 self-start rounded-xl bg-black/[0.04] dark:bg-black/30 px-4 py-2.5 ring-1 ring-black/5 dark:ring-white/5 sm:self-auto">
+          <span className="text-xs text-zinc-600 dark:text-zinc-400">{t("expensesTodayOnly")}:</span>
+          <span className="text-lg font-black font-mono text-rose-600 dark:text-rose-400">
             {formatCurrency(totalExpense)}
           </span>
         </div>
@@ -124,16 +124,16 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Left: Add Expense Form */}
-        <div className="space-y-4 rounded-2xl bg-zinc-900/60 p-5 shadow-xl shadow-black/20 ring-1 ring-white/5 lg:col-span-5">
-          <div className="border-b border-white/5 pb-3">
-            <h3 className="font-bold text-white text-sm flex items-center gap-2">
-              <Plus className="w-4 h-4 text-amber-400" />
+        <div className="space-y-4 rounded-2xl bg-white dark:bg-zinc-900/60 p-5 shadow-xl shadow-black/20 ring-1 ring-black/5 dark:ring-white/5 lg:col-span-5">
+          <div className="border-b border-black/5 dark:border-white/5 pb-3">
+            <h3 className="font-bold text-zinc-900 dark:text-white text-sm flex items-center gap-2">
+              <Plus className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <span>{t("addExpenseBtn")}</span>
             </h3>
           </div>
 
           {error && (
-            <div className="p-3 bg-rose-950/40 border border-rose-800 text-rose-300 rounded-2xl text-xs">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-300 rounded-2xl text-xs">
               {error}
             </div>
           )}
@@ -141,7 +141,7 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
           <form onSubmit={handleAddExpense} className="space-y-4">
             {/* 1-tap Preset Category Buttons */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-2">
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
                 {t("expenseCategory")}
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -155,11 +155,11 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
                       onClick={() => setCategory(lang === "bn" ? cat.labelBn : cat.labelEn)}
                       className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-semibold text-left transition-all ${
                         isSelected
-                          ? "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-xs"
-                          : "bg-zinc-800/80 text-zinc-300 border-zinc-700/60 hover:bg-zinc-800"
+                          ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/50 shadow-xs"
+                          : "bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-zinc-700/60 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                       }`}
                     >
-                      <Icon className="w-4 h-4 text-amber-400 shrink-0" />
+                      <Icon className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0" />
                       <span className="truncate">{lang === "bn" ? cat.labelBn : cat.labelEn}</span>
                     </button>
                   );
@@ -169,11 +169,11 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
 
             {/* Custom Amount */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                {t("expenseAmount")} <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                {t("expenseAmount")} <span className="text-rose-600 dark:text-rose-400">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3.5 top-2.5 text-zinc-400 font-mono font-bold">৳</span>
+                <span className="absolute left-3.5 top-2.5 text-zinc-600 dark:text-zinc-400 font-mono font-bold">৳</span>
                 <input
                   type="number"
                   step="any"
@@ -182,14 +182,14 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white font-mono font-bold text-base focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono font-bold text-base focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             </div>
 
             {/* Note */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                 {t("expenseNote")}
               </label>
               <input
@@ -197,7 +197,7 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
                 placeholder={lang === "bn" ? "উদা: ৫ লিটার তরল দুধ" : "e.g. 5 Liters Liquid Milk"}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-xs placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-xs placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
               />
             </div>
 
@@ -222,17 +222,17 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
         </div>
 
         {/* Right: Expense List */}
-        <div className="space-y-3 rounded-2xl bg-zinc-900/60 p-5 shadow-xl shadow-black/20 ring-1 ring-white/5 lg:col-span-7">
-          <div className="flex items-center justify-between border-b border-white/5 pb-3">
-            <h3 className="font-bold text-white text-sm">
+        <div className="space-y-3 rounded-2xl bg-white dark:bg-zinc-900/60 p-5 shadow-xl shadow-black/20 ring-1 ring-black/5 dark:ring-white/5 lg:col-span-7">
+          <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3">
+            <h3 className="font-bold text-zinc-900 dark:text-white text-sm">
               {lang === "bn" ? "খরচের তালিকা" : "Expense Records"}
             </h3>
-            <span className="text-xs text-zinc-400 font-mono">
+            <span className="text-xs text-zinc-600 dark:text-zinc-400 font-mono">
               {expensesList.length} {lang === "bn" ? "টি এন্ট্রি" : "entries"}
             </span>
           </div>
 
-          <div className="divide-y divide-zinc-800/80 max-h-[500px] overflow-y-auto">
+          <div className="divide-y divide-zinc-200 dark:divide-zinc-800/80 max-h-[500px] overflow-y-auto">
             {expensesList.length === 0 ? (
               <div className="py-12 text-center text-zinc-500 text-xs">
                 {t("noExpensesYet")}
@@ -244,9 +244,9 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
                   className="py-3 flex items-center justify-between gap-3 group"
                 >
                   <div>
-                    <div className="font-bold text-white text-sm">{exp.category}</div>
-                    <div className="text-xs text-zinc-400 mt-0.5">
-                      {exp.note && <span className="mr-2 text-zinc-300">{exp.note}</span>}
+                    <div className="font-bold text-zinc-900 dark:text-white text-sm">{exp.category}</div>
+                    <div className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
+                      {exp.note && <span className="mr-2 text-zinc-700 dark:text-zinc-300">{exp.note}</span>}
                       <span className="text-[11px] text-zinc-500">
                         {new Date(exp.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                       </span>
@@ -254,14 +254,14 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="font-black font-mono text-rose-400 text-base">
+                    <span className="font-black font-mono text-rose-600 dark:text-rose-400 text-base">
                       {formatCurrency(exp.amount)}
                     </span>
                     <button
                       type="button"
                       onClick={() => handleDelete(exp.id)}
                       disabled={deletingId === exp.id}
-                      className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-zinc-800 transition-colors"
+                      className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                       title="মুছে ফেলুন"
                     >
                       <Trash2 className="w-4 h-4" />

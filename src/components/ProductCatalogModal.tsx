@@ -185,17 +185,17 @@ export function ProductCatalogModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="w-full max-w-lg rounded-2xl bg-zinc-900 ring-1 ring-white/10 shadow-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-black/10 dark:ring-white/10 shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/70">
-          <div className="flex items-center gap-2 text-amber-400 font-bold">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-5 py-4 bg-white/70 dark:bg-zinc-950/70">
+          <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold">
             <Package className="w-5 h-5" />
             <span>{t("productCatalogTitle")}</span>
           </div>
           <button
             onClick={onClose}
             aria-label={t("cancel")}
-            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
+            className="rounded-lg p-1.5 text-zinc-600 dark:text-zinc-400 transition-colors hover:bg-black/10 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -205,14 +205,14 @@ export function ProductCatalogModal({
           <div
             className={`m-4 p-3 rounded-2xl text-xs font-semibold flex items-center gap-2 ${
               message.type === "success"
-                ? "bg-emerald-950/60 border border-emerald-700/60 text-emerald-300"
-                : "bg-rose-950/60 border border-rose-700/60 text-rose-300"
+                ? "bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-300"
+                : "bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-700/60 text-rose-600 dark:text-rose-300"
             }`}
           >
             {message.type === "success" ? (
-              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-700 dark:text-emerald-400" />
             ) : (
-              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
             )}
             <span>{message.text}</span>
           </div>
@@ -220,9 +220,9 @@ export function ProductCatalogModal({
 
         <div className="p-5 space-y-4 overflow-y-auto max-h-[440px]">
           {/* Add new product */}
-          <form onSubmit={handleAdd} className="p-3.5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Plus className="w-4 h-4 text-amber-400" />
+          <form onSubmit={handleAdd} className="p-3.5 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-2.5">
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Plus className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <span>{t("addProductBtn")}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -231,7 +231,7 @@ export function ProductCatalogModal({
                 placeholder={t("productNamePlaceholder")}
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-xs placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                className="px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-xs placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
               />
               <input
                 type="number"
@@ -240,7 +240,7 @@ export function ProductCatalogModal({
                 placeholder={t("productPricePlaceholder")}
                 value={newPrice}
                 onChange={(e) => setNewPrice(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-xs font-mono placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                className="px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-xs font-mono placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
               />
             </div>
             <button
@@ -254,7 +254,7 @@ export function ProductCatalogModal({
           </form>
 
           {/* Product list */}
-          <div className="divide-y divide-zinc-800/80">
+          <div className="divide-y divide-zinc-200 dark:divide-zinc-800/80">
             {list.length === 0 ? (
               <div className="py-10 text-center text-zinc-500 text-xs">{t("noProductsYet")}</div>
             ) : (
@@ -267,16 +267,16 @@ export function ProductCatalogModal({
                   <div key={product.id} className="py-2.5 flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-white text-sm truncate">{product.name}</span>
+                        <span className="font-bold text-zinc-900 dark:text-white text-sm truncate">{product.name}</span>
                         {isQuick && (
-                          <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
                             {t("quickMenuBadge")}
                           </span>
                         )}
                       </div>
                       {isEditing ? (
                         <div className="flex items-center gap-1.5 mt-1.5">
-                          <span className="text-zinc-400 font-mono text-xs">৳</span>
+                          <span className="text-zinc-600 dark:text-zinc-400 font-mono text-xs">৳</span>
                           <input
                             type="number"
                             step="any"
@@ -284,7 +284,7 @@ export function ProductCatalogModal({
                             autoFocus
                             value={editPrice}
                             onChange={(e) => setEditPrice(e.target.value)}
-                            className="w-24 px-2 py-1 rounded-lg bg-zinc-800 border border-amber-500/60 text-white text-xs font-mono focus:outline-hidden"
+                            className="w-24 px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-amber-500/60 text-zinc-900 dark:text-white text-xs font-mono focus:outline-hidden"
                           />
                           <button
                             type="button"
@@ -298,13 +298,13 @@ export function ProductCatalogModal({
                           <button
                             type="button"
                             onClick={() => setEditingId(null)}
-                            className="px-2 py-1 rounded-lg text-zinc-400 hover:text-white text-[11px]"
+                            className="px-2 py-1 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white text-[11px]"
                           >
                             {t("cancel")}
                           </button>
                         </div>
                       ) : (
-                        <div className="text-xs text-zinc-400 font-mono mt-0.5">
+                        <div className="text-xs text-zinc-600 dark:text-zinc-400 font-mono mt-0.5">
                           {formatCurrency(product.price)}
                         </div>
                       )}
@@ -315,7 +315,7 @@ export function ProductCatalogModal({
                         <button
                           type="button"
                           onClick={() => startEditing(product)}
-                          className="p-1.5 rounded-lg text-zinc-400 hover:text-amber-400 hover:bg-zinc-800 transition-colors"
+                          className="p-1.5 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                           title={t("editPrice")}
                         >
                           <Pencil className="w-4 h-4" />
@@ -327,8 +327,8 @@ export function ProductCatalogModal({
                         disabled={isBusy}
                         className={`p-1.5 rounded-lg transition-colors disabled:opacity-50 ${
                           isQuick
-                            ? "text-emerald-400 hover:bg-zinc-800"
-                            : "text-zinc-500 hover:text-emerald-400 hover:bg-zinc-800"
+                            ? "text-emerald-700 dark:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                            : "text-zinc-500 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         }`}
                         title={t("toggleQuickAccess")}
                       >
@@ -338,7 +338,7 @@ export function ProductCatalogModal({
                         type="button"
                         onClick={() => handleDelete(product)}
                         disabled={isBusy}
-                        className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-zinc-800 transition-colors disabled:opacity-50"
+                        className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
                         title={t("deleteProduct")}
                       >
                         <Trash2 className="w-4 h-4" />

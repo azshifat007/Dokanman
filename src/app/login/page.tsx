@@ -58,46 +58,46 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col justify-center items-center p-4">
+    <div className="min-h-screen bg-[#f7f5ef] dark:bg-zinc-950 text-zinc-900 dark:text-white flex flex-col justify-center items-center p-4">
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-lg shadow-amber-500/10 mb-2">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 shadow-lg shadow-amber-500/10 mb-2">
             <Coffee className="w-9 h-9 animate-pulse" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
             দোকানম্যান (Dokanman)
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400">
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
             টং ও দোকানের ডিজিটাল বাকির খাতা ও সেলস কাউন্টার
           </p>
         </div>
 
         {/* Login Form Card */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
-          <div className="border-b border-zinc-800/80 pb-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Store className="w-5 h-5 text-amber-400" />
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+          <div className="border-b border-zinc-200 dark:border-zinc-800/80 pb-4">
+            <h2 className="text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+              <Store className="w-5 h-5 text-amber-700 dark:text-amber-400" />
               <span>দোকানদার লগইন</span>
             </h2>
-            <p className="text-xs text-zinc-400 mt-0.5">
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
               আপনার দোকানের মোবাইল নম্বর ও পিন দিয়ে প্রবেশ করুন
             </p>
           </div>
 
           {error && (
-            <div className="p-3.5 bg-rose-950/50 border border-rose-800/60 text-rose-300 rounded-2xl text-xs font-semibold animate-in fade-in">
+            <div className="p-3.5 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/60 text-rose-600 dark:text-rose-300 rounded-2xl text-xs font-semibold animate-in fade-in">
               {error}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                মোবাইল নম্বর <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                মোবাইল নম্বর <span className="text-rose-600 dark:text-rose-400">*</span>
               </label>
               <div className="relative">
-                <Phone className="absolute left-3.5 top-3 w-4 h-4 text-zinc-400" />
+                <Phone className="absolute left-3.5 top-3 w-4 h-4 text-zinc-600 dark:text-zinc-400" />
                 <input
                   type="tel"
                   required
@@ -105,17 +105,17 @@ export default function LoginPage() {
                   placeholder="017XXXXXXXX"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-800/90 border border-zinc-700 text-white font-mono text-sm placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/90 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono text-sm placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                ৪ ডিজিটের পিন কোড <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                ৪ ডিজিটের পিন কোড <span className="text-rose-600 dark:text-rose-400">*</span>
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3 w-4 h-4 text-zinc-400" />
+                <Lock className="absolute left-3.5 top-3 w-4 h-4 text-zinc-600 dark:text-zinc-400" />
                 <input
                   type="password"
                   required
@@ -123,7 +123,7 @@ export default function LoginPage() {
                   placeholder="••••"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-800/90 border border-zinc-700 text-white font-mono text-lg tracking-widest placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/90 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono text-lg tracking-widest placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             </div>
@@ -148,25 +148,25 @@ export default function LoginPage() {
           </form>
 
           {/* Demo Login Button */}
-          <div className="pt-2 border-t border-zinc-800">
+          <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
             <button
               type="button"
               onClick={handleDemoLogin}
               disabled={loading}
-              className="w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-xs text-amber-300 font-bold flex items-center justify-center gap-2 transition-colors"
+              className="w-full py-2.5 px-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 border border-zinc-300 dark:border-zinc-700 text-xs text-amber-700 dark:text-amber-300 font-bold flex items-center justify-center gap-2 transition-colors"
             >
-              <Sparkles className="w-4 h-4 text-amber-400" />
+              <Sparkles className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <span>ডেমো দোকান দেখুন (মামা টং দোকান)</span>
             </button>
           </div>
         </div>
 
         {/* Footer Link to Signup */}
-        <div className="text-center text-xs text-zinc-400">
+        <div className="text-center text-xs text-zinc-600 dark:text-zinc-400">
           <span>নতুন দোকান? </span>
           <Link
             href="/signup"
-            className="text-amber-400 font-bold hover:underline ml-1"
+            className="text-amber-700 dark:text-amber-400 font-bold hover:underline ml-1"
           >
             এখানে সাইনআপ করুন (বিনামূল্যে)
           </Link>

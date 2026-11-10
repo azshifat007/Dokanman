@@ -191,17 +191,17 @@ export function BackupImportExportModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="w-full max-w-lg rounded-2xl bg-zinc-900 ring-1 ring-white/10 shadow-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-black/10 dark:ring-white/10 shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/70">
-          <div className="flex items-center gap-2 text-amber-400 font-bold">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-5 py-4 bg-white/70 dark:bg-zinc-950/70">
+          <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold">
             <Database className="w-5 h-5" />
             <span>{t("backupTitle")}</span>
           </div>
           <button
             onClick={onClose}
             aria-label={t("cancel")}
-            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
+            className="rounded-lg p-1.5 text-zinc-600 dark:text-zinc-400 transition-colors hover:bg-black/10 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -212,14 +212,14 @@ export function BackupImportExportModal({
           <div
             className={`m-4 p-3 rounded-2xl text-xs font-semibold flex items-center gap-2 ${
               message.type === "success"
-                ? "bg-emerald-950/60 border border-emerald-700/60 text-emerald-300"
-                : "bg-rose-950/60 border border-rose-700/60 text-rose-300"
+                ? "bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-300"
+                : "bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-700/60 text-rose-600 dark:text-rose-300"
             }`}
           >
             {message.type === "success" ? (
-              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-700 dark:text-emerald-400" />
             ) : (
-              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
             )}
             <span>{message.text}</span>
           </div>
@@ -227,12 +227,12 @@ export function BackupImportExportModal({
 
         <div className="p-5 space-y-5 overflow-y-auto max-h-[460px]">
           {/* Section 1: Full JSON Backup */}
-          <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Database className="w-4 h-4 text-amber-400" />
+          <div className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-2.5">
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Database className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <span>{t("exportJsonBackup")}</span>
             </div>
-            <p className="text-xs text-zinc-400">{t("exportJsonDesc")}</p>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">{t("exportJsonDesc")}</p>
 
             <button
               type="button"
@@ -255,9 +255,9 @@ export function BackupImportExportModal({
           </div>
 
           {/* Section 2: CSV Exports */}
-          <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+          <div className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-3">
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <FileSpreadsheet className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
               <span>{t("csvExportHeading")}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -265,54 +265,54 @@ export function BackupImportExportModal({
                 type="button"
                 onClick={() => handleDownloadCsv("customers")}
                 disabled={downloading}
-                className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
+                className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 border border-zinc-300 dark:border-zinc-700 text-left text-xs text-zinc-800 dark:text-zinc-200 transition-colors"
               >
-                <div className="font-semibold text-white">{t("exportCustomersCsv")}</div>
-                <div className="text-[10px] text-zinc-400">{t("customersCsvSub")}</div>
+                <div className="font-semibold text-zinc-900 dark:text-white">{t("exportCustomersCsv")}</div>
+                <div className="text-[10px] text-zinc-600 dark:text-zinc-400">{t("customersCsvSub")}</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleDownloadCsv("transactions")}
                 disabled={downloading}
-                className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
+                className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 border border-zinc-300 dark:border-zinc-700 text-left text-xs text-zinc-800 dark:text-zinc-200 transition-colors"
               >
-                <div className="font-semibold text-white">{t("exportTransactionsCsv")}</div>
-                <div className="text-[10px] text-zinc-400">{t("transactionsCsvSub")}</div>
+                <div className="font-semibold text-zinc-900 dark:text-white">{t("exportTransactionsCsv")}</div>
+                <div className="text-[10px] text-zinc-600 dark:text-zinc-400">{t("transactionsCsvSub")}</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleDownloadCsv("orders")}
                 disabled={downloading}
-                className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
+                className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 border border-zinc-300 dark:border-zinc-700 text-left text-xs text-zinc-800 dark:text-zinc-200 transition-colors"
               >
-                <div className="font-semibold text-white">{t("exportOrdersCsv")}</div>
-                <div className="text-[10px] text-zinc-400">{t("ordersCsvSub")}</div>
+                <div className="font-semibold text-zinc-900 dark:text-white">{t("exportOrdersCsv")}</div>
+                <div className="text-[10px] text-zinc-600 dark:text-zinc-400">{t("ordersCsvSub")}</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleDownloadCsv("expenses")}
                 disabled={downloading}
-                className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
+                className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 border border-zinc-300 dark:border-zinc-700 text-left text-xs text-zinc-800 dark:text-zinc-200 transition-colors"
               >
-                <div className="font-semibold text-white">{t("csvExpenses")}</div>
-                <div className="text-[10px] text-zinc-400">{t("csvExpensesSub")}</div>
+                <div className="font-semibold text-zinc-900 dark:text-white">{t("csvExpenses")}</div>
+                <div className="text-[10px] text-zinc-600 dark:text-zinc-400">{t("csvExpensesSub")}</div>
               </button>
             </div>
           </div>
 
           {/* Section 3: Restore Backup */}
-          <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Upload className="w-4 h-4 text-blue-400" />
+          <div className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-2.5">
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>{t("restoreBackupTitle")}</span>
             </div>
-            <p className="text-xs text-zinc-400">{t("restoreBackupDesc")}</p>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">{t("restoreBackupDesc")}</p>
 
             <div className="space-y-1.5">
-              <span className="block text-[11px] font-semibold text-zinc-400">
+              <span className="block text-[11px] font-semibold text-zinc-600 dark:text-zinc-400">
                 {t("importModeLabel")}
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -321,8 +321,8 @@ export function BackupImportExportModal({
                   onClick={() => setImportMode("merge")}
                   className={`px-2.5 py-2 rounded-xl text-[11px] font-semibold border transition-colors ${
                     importMode === "merge"
-                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/50"
-                      : "bg-zinc-800 text-zinc-400 border-zinc-700 hover:text-white"
+                      ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/50"
+                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-zinc-700 hover:text-zinc-900 dark:hover:text-white"
                   }`}
                 >
                   {t("importModeMerge")}
@@ -332,15 +332,15 @@ export function BackupImportExportModal({
                   onClick={() => setImportMode("replace")}
                   className={`px-2.5 py-2 rounded-xl text-[11px] font-semibold border transition-colors ${
                     importMode === "replace"
-                      ? "bg-rose-500/20 text-rose-300 border-rose-500/50"
-                      : "bg-zinc-800 text-zinc-400 border-zinc-700 hover:text-white"
+                      ? "bg-rose-500/20 text-rose-600 dark:text-rose-300 border-rose-500/50"
+                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-zinc-700 hover:text-zinc-900 dark:hover:text-white"
                   }`}
                 >
                   {t("importModeReplace")}
                 </button>
               </div>
               {importMode === "replace" && (
-                <p className="text-[10px] text-rose-400/90">
+                <p className="text-[10px] text-rose-600 dark:text-rose-400/90">
                   {lang === "bn"
                     ? "সতর্কতা: রিপ্লেস করলে আপনার বর্তমান সকল পণ্য, কাস্টমার ও লেনদেন মুছে যাবে।"
                     : "Warning: replacing deletes all your current products, customers and ledger records."}
@@ -348,15 +348,15 @@ export function BackupImportExportModal({
               )}
             </div>
 
-            <label className="w-full py-2.5 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors">
+            <label className="w-full py-2.5 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors">
               {restoring ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-600 dark:text-blue-400" />
                   <span>{t("restoringNow")}</span>
                 </>
               ) : (
                 <>
-                  <Upload className="w-4 h-4 text-blue-400" />
+                  <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <span>{t("uploadAndRestore")} (.json)</span>
                 </>
               )}
@@ -371,22 +371,22 @@ export function BackupImportExportModal({
           </div>
 
           {/* Section 4: Customers CSV Import */}
-          <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Upload className="w-4 h-4 text-amber-400" />
+          <div className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-2.5">
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Upload className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <span>{t("importCustomersCsvTitle")}</span>
             </div>
-            <p className="text-xs text-zinc-400">{t("importCustomersCsvDesc")}</p>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">{t("importCustomersCsvDesc")}</p>
 
-            <label className="w-full py-2.5 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors">
+            <label className="w-full py-2.5 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors">
               {importingCsv ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
+                  <Loader2 className="w-4 h-4 animate-spin text-amber-700 dark:text-amber-400" />
                   <span>{t("importingNow")}</span>
                 </>
               ) : (
                 <>
-                  <Upload className="w-4 h-4 text-amber-400" />
+                  <Upload className="w-4 h-4 text-amber-700 dark:text-amber-400" />
                   <span>{t("importCustomersCsvBtn")} (.csv)</span>
                 </>
               )}

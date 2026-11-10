@@ -10,6 +10,7 @@ Mobile-first digital ledger and fast sales counter for small tea stalls and groc
 - `jose` HS256 session cookie (httpOnly, 30 days), `bcryptjs` PIN hashing
 - Zustand for the in-progress cart
 - Vercel Web Analytics (`@vercel/analytics`)
+- Automatic day/night theme: a warm light palette between 06:00 and 18:00 device-local time, the dark palette otherwise
 
 ## Local development
 

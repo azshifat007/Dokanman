@@ -95,17 +95,17 @@ export function CustomerLedger({
   return (
     <div className="space-y-4">
       {/* Top Controls */}
-      <div className="space-y-3 rounded-2xl bg-zinc-900/60 p-4 shadow-xl shadow-black/20 ring-1 ring-white/5">
+      <div className="space-y-3 rounded-2xl bg-white dark:bg-zinc-900/60 p-4 shadow-xl shadow-black/20 ring-1 ring-black/5 dark:ring-white/5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
               <span>{t("ledgerTitle")}</span>
-              <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs font-semibold text-zinc-300 ring-1 ring-white/10">
+              <span className="rounded-full bg-black/5 dark:bg-white/5 px-2 py-0.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300 ring-1 ring-black/10 dark:ring-white/10">
                 {filtered.length}{" "}
                 {lang === "bn" ? "জন কাস্টমার" : filtered.length === 1 ? "customer" : "customers"}
               </span>
             </h2>
-            <p className="text-xs text-zinc-400">{t("ledgerSubtitle")}</p>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">{t("ledgerSubtitle")}</p>
           </div>
 
           <button
@@ -121,13 +121,13 @@ export function CustomerLedger({
         {/* Filter and Search */}
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-3 w-4 h-4 text-zinc-400" />
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-zinc-600 dark:text-zinc-400" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t("searchLedgerPlaceholder")}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-xs text-white placeholder-zinc-500 transition-colors focus:border-amber-500 focus:outline-hidden sm:text-sm"
+              className="w-full rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.04] py-2.5 pl-10 pr-4 text-xs text-zinc-900 dark:text-white placeholder-zinc-500 transition-colors focus:border-amber-500 focus:outline-hidden sm:text-sm"
             />
           </div>
 
@@ -136,8 +136,8 @@ export function CustomerLedger({
             onClick={() => setFilterDueOnly(!filterDueOnly)}
             className={`flex items-center justify-center gap-1.5 rounded-xl border px-3.5 py-2.5 text-xs font-semibold transition-all ${
               filterDueOnly
-                ? "border-rose-500/40 bg-rose-500/15 text-rose-300"
-                : "border-white/10 bg-white/[0.04] text-zinc-400 hover:text-white"
+                ? "border-rose-500/40 bg-rose-500/15 text-rose-600 dark:text-rose-300"
+                : "border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
             }`}
           >
             <AlertCircle className="w-3.5 h-3.5" />
@@ -149,9 +149,9 @@ export function CustomerLedger({
       {/* Customer List Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {filtered.length === 0 ? (
-          <div className="col-span-full rounded-2xl bg-zinc-900/50 py-16 text-center ring-1 ring-white/5">
-            <p className="text-zinc-400 text-sm font-semibold">{t("noCustomersFound")}</p>
-            <p className="text-zinc-600 text-xs mt-1">
+          <div className="col-span-full rounded-2xl bg-white dark:bg-zinc-900/50 py-16 text-center ring-1 ring-black/5 dark:ring-white/5">
+            <p className="text-zinc-600 dark:text-zinc-400 text-sm font-semibold">{t("noCustomersFound")}</p>
+            <p className="text-zinc-500 dark:text-zinc-600 text-xs mt-1">
               {lang === "bn"
                 ? "নতুন কাস্টমার তৈরি করতে উপরের বাটনে চাপ দিন।"
                 : "Use the button above to add a new customer."}
@@ -166,18 +166,18 @@ export function CustomerLedger({
             return (
               <div
                 key={customer.id}
-                className="flex flex-col justify-between space-y-3 rounded-2xl bg-zinc-900/60 p-4 shadow-lg shadow-black/10 ring-1 ring-white/5 transition-all hover:ring-white/10"
+                className="flex flex-col justify-between space-y-3 rounded-2xl bg-white dark:bg-zinc-900/60 p-4 shadow-lg shadow-black/10 ring-1 ring-black/5 dark:ring-white/5 transition-all hover:ring-black/10 dark:hover:ring-white/10"
               >
                 {/* Header row */}
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-bold text-white text-base">{customer.name}</h3>
+                    <h3 className="font-bold text-zinc-900 dark:text-white text-base">{customer.name}</h3>
                     {customer.phone ? (
                       <a
                         href={`tel:${customer.phone}`}
-                        className="text-xs text-zinc-400 hover:text-amber-400 flex items-center gap-1 mt-0.5 font-mono"
+                        className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-amber-700 dark:hover:text-amber-400 flex items-center gap-1 mt-0.5 font-mono"
                       >
-                        <Phone className="w-3 h-3 text-emerald-400" />
+                        <Phone className="w-3 h-3 text-emerald-700 dark:text-emerald-400" />
                         <span>{customer.phone}</span>
                       </a>
                     ) : (
@@ -189,12 +189,12 @@ export function CustomerLedger({
 
                   {/* Due amount badge */}
                   <div className="text-right">
-                    <span className="text-[10px] text-zinc-400 block uppercase tracking-wider">
+                    <span className="text-[10px] text-zinc-600 dark:text-zinc-400 block uppercase tracking-wider">
                       {lang === "bn" ? "মোট বকেয়া" : "Total Due"}
                     </span>
                     <span
                       className={`font-black font-mono text-lg sm:text-xl ${
-                        due > 0 ? "text-rose-400" : "text-emerald-400"
+                        due > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-700 dark:text-emerald-400"
                       }`}
                     >
                       {formatCurrency(due)}
@@ -203,12 +203,12 @@ export function CustomerLedger({
                 </div>
 
                 {/* Quick Actions Row */}
-                <div className="flex flex-wrap items-center justify-between gap-1.5 border-t border-white/5 pt-2">
+                <div className="flex flex-wrap items-center justify-between gap-1.5 border-t border-black/5 dark:border-white/5 pt-2">
                   <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => setSettleCustomer(customer)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-300 transition-all hover:bg-emerald-500/20"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300 transition-all hover:bg-emerald-500/20"
                     >
                       <HandCoins className="w-3.5 h-3.5" />
                       <span>{t("settleDueBtn")}</span>
@@ -217,7 +217,7 @@ export function CustomerLedger({
                     <button
                       type="button"
                       onClick={() => onOpenCartForCustomer(customer)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-300 transition-all hover:bg-amber-500/20"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-700 dark:text-amber-300 transition-all hover:bg-amber-500/20"
                     >
                       <ShoppingBag className="w-3.5 h-3.5" />
                       <span>{t("takeOrderBtn")}</span>
@@ -226,7 +226,7 @@ export function CustomerLedger({
                     <button
                       type="button"
                       onClick={() => openHistory(customer)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-bold text-zinc-300 transition-all hover:bg-white/[0.08]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.04] px-3 py-1.5 text-xs font-bold text-zinc-700 dark:text-zinc-300 transition-all hover:bg-black/[0.08] dark:hover:bg-white/[0.08]"
                     >
                       <History className="w-3.5 h-3.5" />
                       <span>{t("historyBtn")}</span>
@@ -240,7 +240,7 @@ export function CustomerLedger({
                         href={waLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-600/30 text-xs flex items-center gap-1 transition-all"
+                        className="p-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-700 dark:text-emerald-400 border border-emerald-600/30 text-xs flex items-center gap-1 transition-all"
                         title={t("whatsappReminder")}
                       >
                         <MessageCircle className="w-3.5 h-3.5" />
@@ -251,7 +251,7 @@ export function CustomerLedger({
                     {smsLink && due > 0 && (
                       <a
                         href={smsLink}
-                        className="p-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-600/30 text-xs flex items-center gap-1 transition-all"
+                        className="p-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-600 dark:text-blue-400 border border-blue-600/30 text-xs flex items-center gap-1 transition-all"
                         title={t("smsReminder")}
                       >
                         <span className="text-[11px] font-semibold">{t("smsReminder")}</span>
@@ -288,25 +288,25 @@ export function CustomerLedger({
       {/* Transaction history modal */}
       {historyCustomer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="w-full max-w-lg rounded-2xl bg-zinc-900 ring-1 ring-white/10 shadow-2xl overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/70">
-              <div className="flex items-center gap-2 text-amber-400 font-bold">
+          <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-black/10 dark:ring-white/10 shadow-2xl overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-5 py-4 bg-white/70 dark:bg-zinc-950/70">
+              <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold">
                 <History className="w-5 h-5" />
                 <span>{t("customerHistoryTitle")}</span>
               </div>
               <button
                 onClick={() => setHistoryCustomer(null)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800"
+                className="p-1 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="px-5 py-3 bg-zinc-800/40 border-b border-zinc-800 flex items-center justify-between text-xs">
-              <span className="font-bold text-white text-sm">{historyCustomer.name}</span>
-              <span className="text-zinc-400">
+            <div className="px-5 py-3 bg-zinc-100 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs">
+              <span className="font-bold text-zinc-900 dark:text-white text-sm">{historyCustomer.name}</span>
+              <span className="text-zinc-600 dark:text-zinc-400">
                 {lang === "bn" ? "বর্তমান বাকি:" : "Current due:"}{" "}
-                <span className="font-mono font-bold text-rose-400">
+                <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
                   {formatCurrency(historyCustomer.totalDue)}
                 </span>
               </span>
@@ -314,17 +314,17 @@ export function CustomerLedger({
 
             <div className="p-4 max-h-[420px] overflow-y-auto">
               {historyLoading ? (
-                <div className="py-12 flex items-center justify-center text-zinc-400 text-xs gap-2">
+                <div className="py-12 flex items-center justify-center text-zinc-600 dark:text-zinc-400 text-xs gap-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span>{lang === "bn" ? "লোড হচ্ছে..." : "Loading..."}</span>
                 </div>
               ) : historyRows.length === 0 ? (
                 <div className="py-12 text-center text-zinc-500 text-xs flex flex-col items-center gap-2">
-                  <Receipt className="w-8 h-8 text-zinc-700" />
+                  <Receipt className="w-8 h-8 text-zinc-600 dark:text-zinc-700" />
                   <span>{t("noHistoryYet")}</span>
                 </div>
               ) : (
-                <div className="divide-y divide-zinc-800/80">
+                <div className="divide-y divide-zinc-200 dark:divide-zinc-800/80">
                   {historyRows.map((tx) => {
                     const isPayment = tx.type === "PAYMENT";
                     return (
@@ -333,8 +333,8 @@ export function CustomerLedger({
                           <div
                             className={`mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center border ${
                               isPayment
-                                ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
-                                : "bg-rose-500/15 text-rose-400 border-rose-500/30"
+                                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30"
+                                : "bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/30"
                             }`}
                           >
                             {isPayment ? (
@@ -344,11 +344,11 @@ export function CustomerLedger({
                             )}
                           </div>
                           <div className="min-w-0">
-                            <div className="text-xs font-semibold text-white">
+                            <div className="text-xs font-semibold text-zinc-900 dark:text-white">
                               {isPayment ? t("paymentTypeLabel") : t("purchaseType")}
                             </div>
                             {tx.note && (
-                              <div className="text-[11px] text-zinc-400 truncate max-w-[240px]">
+                              <div className="text-[11px] text-zinc-600 dark:text-zinc-400 truncate max-w-[240px]">
                                 {tx.note}
                               </div>
                             )}
@@ -362,7 +362,7 @@ export function CustomerLedger({
                         </div>
                         <span
                           className={`font-mono font-bold text-sm ${
-                            isPayment ? "text-emerald-400" : "text-rose-400"
+                            isPayment ? "text-emerald-700 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
                           }`}
                         >
                           {isPayment ? "-" : "+"} {formatCurrency(tx.amount)}

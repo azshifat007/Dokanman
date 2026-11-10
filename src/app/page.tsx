@@ -27,18 +27,18 @@ async function DashboardContent() {
 
 function DashboardSkeleton() {
   return (
-    <div className="min-h-screen bg-zinc-950 p-3 sm:p-4">
+    <div className="min-h-screen bg-[#f7f5ef] dark:bg-zinc-950 p-3 sm:p-4">
       <div className="mx-auto max-w-7xl space-y-4">
-        <div className="h-14 animate-pulse rounded-2xl bg-white/[0.04]" />
-        <div className="h-24 animate-pulse rounded-2xl bg-white/[0.06]" />
+        <div className="h-14 animate-pulse rounded-2xl bg-black/[0.04] dark:bg-white/[0.04]" />
+        <div className="h-24 animate-pulse rounded-2xl bg-black/[0.06] dark:bg-white/[0.06]" />
         <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
           {[0, 1, 2, 3].map((index) => (
-            <div key={index} className="h-24 animate-pulse rounded-2xl bg-white/[0.04]" />
+            <div key={index} className="h-24 animate-pulse rounded-2xl bg-black/[0.04] dark:bg-white/[0.04]" />
           ))}
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-          <div className="h-64 animate-pulse rounded-2xl bg-white/[0.03] lg:col-span-8" />
-          <div className="h-64 animate-pulse rounded-2xl bg-white/[0.03] lg:col-span-4" />
+          <div className="h-64 animate-pulse rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] lg:col-span-8" />
+          <div className="h-64 animate-pulse rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] lg:col-span-4" />
         </div>
       </div>
       <div className="sr-only">

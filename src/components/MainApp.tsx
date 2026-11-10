@@ -114,7 +114,7 @@ function MainAppContent({
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-950 font-sans text-white selection:bg-amber-500 selection:text-black">
+    <div className="flex min-h-screen flex-col bg-[#f7f5ef] dark:bg-zinc-950 font-sans text-zinc-900 dark:text-white selection:bg-amber-500 selection:text-black">
       <Header
         shopName={shopName}
         phone={phone}
@@ -174,17 +174,17 @@ function MainAppContent({
         </div>
       </main>
 
-      <footer className="px-4 pb-28 pt-2 text-center text-[11px] text-zinc-600 md:pb-6">
+      <footer className="px-4 pb-28 pt-2 text-center text-[11px] text-zinc-500 dark:text-zinc-600 md:pb-6">
         <p>দোকানম্যান (Dokanman) — {t("footerTagline")}</p>
       </footer>
 
       {/* Mobile cart shortcut, parked above the bottom navigation */}
       {tab === "pos" && cartCount > 0 && (
-        <div className="fixed inset-x-0 bottom-[calc(58px+env(safe-area-inset-bottom))] z-30 flex items-center justify-between gap-3 border-t border-white/10 bg-zinc-900/95 px-3 py-2 backdrop-blur lg:hidden">
-          <div className="text-xs text-zinc-300">
-            <span className="font-bold text-white">{cartCount}</span>{" "}
+        <div className="fixed inset-x-0 bottom-[calc(58px+env(safe-area-inset-bottom))] z-30 flex items-center justify-between gap-3 border-t border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900/95 px-3 py-2 backdrop-blur lg:hidden">
+          <div className="text-xs text-zinc-700 dark:text-zinc-300">
+            <span className="font-bold text-zinc-900 dark:text-white">{cartCount}</span>{" "}
             {lang === "bn" ? "টি আইটেম" : "items"} •{" "}
-            <span className="font-mono font-bold text-amber-400">
+            <span className="font-mono font-bold text-amber-700 dark:text-amber-400">
               {formatCurrency(getSubtotal())}
             </span>
           </div>

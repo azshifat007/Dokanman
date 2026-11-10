@@ -73,16 +73,16 @@ export function SettingsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="w-full max-w-md rounded-2xl bg-zinc-900 ring-1 ring-white/10 shadow-2xl overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/70">
-          <div className="flex items-center gap-2 text-amber-400 font-bold">
+      <div className="w-full max-w-md rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-black/10 dark:ring-white/10 shadow-2xl overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-5 py-4 bg-white/70 dark:bg-zinc-950/70">
+          <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold">
             <Settings className="w-5 h-5" />
             <span>{t("settingsTitle")}</span>
           </div>
           <button
             onClick={onClose}
             aria-label={t("cancel")}
-            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
+            className="rounded-lg p-1.5 text-zinc-600 dark:text-zinc-400 transition-colors hover:bg-black/10 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -92,10 +92,10 @@ export function SettingsModal({
           {/* Shop profile */}
           <form
             onSubmit={handleSaveProfile}
-            className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3"
+            className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-3"
           >
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Store className="w-4 h-4 text-amber-400" />
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Store className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <span>{t("settingsProfileSection")}</span>
             </div>
 
@@ -103,8 +103,8 @@ export function SettingsModal({
               <div
                 className={`p-2.5 rounded-xl text-[11px] font-semibold flex items-center gap-1.5 ${
                   profileMsg.type === "success"
-                    ? "bg-emerald-950/60 border border-emerald-700/60 text-emerald-300"
-                    : "bg-rose-950/60 border border-rose-700/60 text-rose-300"
+                    ? "bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-300"
+                    : "bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-700/60 text-rose-600 dark:text-rose-300"
                 }`}
               >
                 {profileMsg.type === "success" ? (
@@ -117,21 +117,21 @@ export function SettingsModal({
             )}
 
             <div>
-              <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+              <label className="block text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                 {t("settingsShopName")}
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-sm focus:outline-hidden focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-sm focus:outline-hidden focus:border-amber-500"
               />
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-zinc-400">
+            <div className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">
               <Phone className="w-3.5 h-3.5 text-zinc-500" />
               <span className="font-mono">{phone}</span>
-              <span className="text-[10px] text-zinc-600">
+              <span className="text-[10px] text-zinc-500 dark:text-zinc-600">
                 ({bn ? "মোবাইল নম্বর পরিবর্তন করা যায় না" : "phone number cannot be changed"})
               </span>
             </div>
@@ -153,10 +153,10 @@ export function SettingsModal({
           {/* PIN change */}
           <form
             onSubmit={handleChangePin}
-            className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3"
+            className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-3"
           >
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Lock className="w-4 h-4 text-emerald-400" />
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Lock className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
               <span>{t("settingsPinSection")}</span>
             </div>
 
@@ -164,8 +164,8 @@ export function SettingsModal({
               <div
                 className={`p-2.5 rounded-xl text-[11px] font-semibold flex items-center gap-1.5 ${
                   pinMsg.type === "success"
-                    ? "bg-emerald-950/60 border border-emerald-700/60 text-emerald-300"
-                    : "bg-rose-950/60 border border-rose-700/60 text-rose-300"
+                    ? "bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-300"
+                    : "bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-700/60 text-rose-600 dark:text-rose-300"
                 }`}
               >
                 {pinMsg.type === "success" ? (
@@ -179,7 +179,7 @@ export function SettingsModal({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                <label className="block text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                   {t("currentPin")}
                 </label>
                 <input
@@ -188,11 +188,11 @@ export function SettingsModal({
                   maxLength={6}
                   value={currentPin}
                   onChange={(e) => setCurrentPin(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-sm font-mono tracking-widest focus:outline-hidden focus:border-emerald-500"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-sm font-mono tracking-widest focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                <label className="block text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                   {t("newPin")}
                 </label>
                 <input
@@ -201,7 +201,7 @@ export function SettingsModal({
                   maxLength={6}
                   value={newPin}
                   onChange={(e) => setNewPin(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-sm font-mono tracking-widest focus:outline-hidden focus:border-emerald-500"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-sm font-mono tracking-widest focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
             </div>

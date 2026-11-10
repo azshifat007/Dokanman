@@ -44,46 +44,46 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col justify-center items-center p-4">
+    <div className="min-h-screen bg-[#f7f5ef] dark:bg-zinc-950 text-zinc-900 dark:text-white flex flex-col justify-center items-center p-4">
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-lg shadow-amber-500/10 mb-2">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 shadow-lg shadow-amber-500/10 mb-2">
             <Coffee className="w-9 h-9 animate-pulse" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
             দোকানম্যান (Dokanman)
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400">
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
             আপনার টং বা মুদি দোকানের জন্য ১ মিনিটে ফ্রি অ্যাকাউন্ট খুলুন
           </p>
         </div>
 
         {/* Signup Form Card */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
-          <div className="border-b border-zinc-800/80 pb-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Store className="w-5 h-5 text-amber-400" />
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+          <div className="border-b border-zinc-200 dark:border-zinc-800/80 pb-4">
+            <h2 className="text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+              <Store className="w-5 h-5 text-amber-700 dark:text-amber-400" />
               <span>নতুন দোকানদার রেজিস্টার</span>
             </h2>
-            <p className="text-xs text-zinc-400 mt-0.5">
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
               রেজিস্টার করলেই টং এর প্রয়োজনীয় মেন্যু অটোমেটিক সাজিয়ে দেওয়া হবে
             </p>
           </div>
 
           {error && (
-            <div className="p-3.5 bg-rose-950/50 border border-rose-800/60 text-rose-300 rounded-2xl text-xs font-semibold animate-in fade-in">
+            <div className="p-3.5 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/60 text-rose-600 dark:text-rose-300 rounded-2xl text-xs font-semibold animate-in fade-in">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                দোকানের নাম <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                দোকানের নাম <span className="text-rose-600 dark:text-rose-400">*</span>
               </label>
               <div className="relative">
-                <Store className="absolute left-3.5 top-3 w-4 h-4 text-zinc-400" />
+                <Store className="absolute left-3.5 top-3 w-4 h-4 text-zinc-600 dark:text-zinc-400" />
                 <input
                   type="text"
                   required
@@ -91,34 +91,34 @@ export default function SignupPage() {
                   placeholder="যেমন: আলমগীর টি স্টল ও স্ন্যাক্স"
                   value={shopName}
                   onChange={(e) => setShopName(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-800/90 border border-zinc-700 text-white text-sm placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/90 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white text-sm placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                মোবাইল নম্বর <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                মোবাইল নম্বর <span className="text-rose-600 dark:text-rose-400">*</span>
               </label>
               <div className="relative">
-                <Phone className="absolute left-3.5 top-3 w-4 h-4 text-zinc-400" />
+                <Phone className="absolute left-3.5 top-3 w-4 h-4 text-zinc-600 dark:text-zinc-400" />
                 <input
                   type="tel"
                   required
                   placeholder="01XXXXXXXXX"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-800/90 border border-zinc-700 text-white font-mono text-sm placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/90 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono text-sm placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-                ৪ বা ৬ ডিজিটের পিন কোড <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                ৪ বা ৬ ডিজিটের পিন কোড <span className="text-rose-600 dark:text-rose-400">*</span>
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3 w-4 h-4 text-zinc-400" />
+                <Lock className="absolute left-3.5 top-3 w-4 h-4 text-zinc-600 dark:text-zinc-400" />
                 <input
                   type="password"
                   required
@@ -126,7 +126,7 @@ export default function SignupPage() {
                   placeholder="যেমন: ১২৩৪"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-800/90 border border-zinc-700 text-white font-mono text-lg tracking-widest placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800/90 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono text-lg tracking-widest placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
               <p className="text-[11px] text-zinc-500 mt-1">
@@ -155,11 +155,11 @@ export default function SignupPage() {
         </div>
 
         {/* Footer Link to Login */}
-        <div className="text-center text-xs text-zinc-400">
+        <div className="text-center text-xs text-zinc-600 dark:text-zinc-400">
           <span>ইতিমধ্যে অ্যাকাউন্ট আছে? </span>
           <Link
             href="/login"
-            className="text-amber-400 font-bold hover:underline ml-1"
+            className="text-amber-700 dark:text-amber-400 font-bold hover:underline ml-1"
           >
             এখানে লগইন করুন
           </Link>

@@ -93,34 +93,34 @@ export function SettleDueModal({ customer, isOpen, onClose, onSuccess }: SettleD
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="w-full max-w-md rounded-2xl bg-zinc-900 ring-1 ring-white/10 shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-black/10 dark:ring-white/10 shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/60">
-          <div className="flex items-center gap-2.5 text-emerald-400 font-bold">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-5 py-4 bg-white/60 dark:bg-zinc-950/60">
+          <div className="flex items-center gap-2.5 text-emerald-700 dark:text-emerald-400 font-bold">
             <HandCoins className="w-5 h-5" />
             <span>{t("settleDueTitle")}</span>
           </div>
           <button
             onClick={handleClose}
-            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800"
+            className="p-1 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Customer info strip */}
-        <div className="px-5 py-3 bg-zinc-800/40 border-b border-zinc-800 flex items-center justify-between text-xs">
+        <div className="px-5 py-3 bg-zinc-100 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs">
           <div>
-            <span className="text-zinc-400">
+            <span className="text-zinc-600 dark:text-zinc-400">
               {lang === "bn" ? "কাস্টমার: " : "Customer: "}
             </span>
-            <span className="font-bold text-white">{customer.name}</span>
+            <span className="font-bold text-zinc-900 dark:text-white">{customer.name}</span>
           </div>
           <div>
-            <span className="text-zinc-400">
+            <span className="text-zinc-600 dark:text-zinc-400">
               {lang === "bn" ? "বর্তমান বকেয়া: " : "Current due: "}
             </span>
-            <span className="font-extrabold text-rose-400 font-mono text-sm">
+            <span className="font-extrabold text-rose-600 dark:text-rose-400 font-mono text-sm">
               {formatCurrency(currentDue)}
             </span>
           </div>
@@ -129,23 +129,23 @@ export function SettleDueModal({ customer, isOpen, onClose, onSuccess }: SettleD
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           {error && (
-            <div className="p-3 bg-rose-950/40 border border-rose-800 text-rose-300 rounded-xl text-xs">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-300 rounded-xl text-xs">
               {error}
             </div>
           )}
           {success && (
-            <div className="p-3 bg-emerald-950/40 border border-emerald-800 text-emerald-300 rounded-xl text-xs flex items-center gap-2">
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 rounded-xl text-xs flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />
               <span>{success}</span>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-              {t("settleAmount")} <span className="text-rose-400">*</span>
+            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+              {t("settleAmount")} <span className="text-rose-600 dark:text-rose-400">*</span>
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-2.5 text-zinc-400 font-mono font-bold">৳</span>
+              <span className="absolute left-3.5 top-2.5 text-zinc-600 dark:text-zinc-400 font-mono font-bold">৳</span>
               <input
                 type="number"
                 step="any"
@@ -156,20 +156,20 @@ export function SettleDueModal({ customer, isOpen, onClose, onSuccess }: SettleD
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full pl-8 pr-24 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white font-mono font-bold text-base focus:outline-hidden focus:border-emerald-500"
+                className="w-full pl-8 pr-24 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono font-bold text-base focus:outline-hidden focus:border-emerald-500"
               />
               <button
                 type="button"
                 onClick={() => setAmount(currentDue.toString())}
-                className="absolute right-2 top-2 px-2.5 py-1 rounded-lg bg-zinc-700 text-zinc-200 text-xs font-semibold hover:bg-zinc-600"
+                className="absolute right-2 top-2 px-2.5 py-1 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold hover:bg-zinc-600"
               >
                 {t("fullDue")}
               </button>
             </div>
             {Number.isFinite(paidNum) && paidNum > 0 && (
-              <p className="text-[11px] text-zinc-400 mt-1.5">
+              <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1.5">
                 {t("partialDueRemains")}{" "}
-                <span className="font-mono font-bold text-amber-400">
+                <span className="font-mono font-bold text-amber-700 dark:text-amber-400">
                   {formatCurrency(remaining)}
                 </span>
               </p>
@@ -177,7 +177,7 @@ export function SettleDueModal({ customer, isOpen, onClose, onSuccess }: SettleD
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
               {t("paymentNote")}
             </label>
             <input
@@ -185,16 +185,16 @@ export function SettleDueModal({ customer, isOpen, onClose, onSuccess }: SettleD
               placeholder={lang === "bn" ? "উদা: নগদ ক্যাশ দিল / বিকাশ পার্সোনাল" : "e.g. Cash / bKash"}
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-500 text-xs focus:outline-hidden focus:border-emerald-500"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder-zinc-500 text-xs focus:outline-hidden focus:border-emerald-500"
             />
           </div>
 
-          <div className="pt-2 flex items-center justify-end gap-2.5 border-t border-zinc-800/80">
+          <div className="pt-2 flex items-center justify-end gap-2.5 border-t border-zinc-200 dark:border-zinc-800/80">
             <button
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-zinc-800"
+              className="px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800"
             >
               {t("cancel")}
             </button>
