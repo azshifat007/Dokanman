@@ -82,7 +82,8 @@ export function NewCustomerModal({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800"
+            aria-label={t("cancel")}
+            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>

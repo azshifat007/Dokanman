@@ -105,7 +105,7 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
   return (
     <div className="space-y-4">
       {/* Top Banner */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-4 sm:p-5 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col justify-between gap-3 rounded-2xl bg-zinc-900/60 p-4 shadow-xl shadow-black/20 ring-1 ring-white/5 sm:flex-row sm:items-center sm:p-5">
         <div>
           <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
             <Receipt className="w-5 h-5 text-amber-400" />
@@ -114,7 +114,7 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
           <p className="text-xs text-zinc-400 mt-0.5">{t("expenseSubtitle")}</p>
         </div>
 
-        <div className="bg-zinc-950 border border-zinc-800 px-4 py-2.5 rounded-2xl flex items-center gap-2.5 self-start sm:self-auto">
+        <div className="flex items-center gap-2.5 self-start rounded-xl bg-black/30 px-4 py-2.5 ring-1 ring-white/5 sm:self-auto">
           <span className="text-xs text-zinc-400">{t("expensesTodayOnly")}:</span>
           <span className="text-lg font-black font-mono text-rose-400">
             {formatCurrency(totalExpense)}
@@ -124,8 +124,8 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Left: Add Expense Form */}
-        <div className="lg:col-span-5 bg-zinc-900 border border-zinc-800 rounded-3xl p-5 shadow-xl space-y-4">
-          <div className="border-b border-zinc-800 pb-3">
+        <div className="space-y-4 rounded-2xl bg-zinc-900/60 p-5 shadow-xl shadow-black/20 ring-1 ring-white/5 lg:col-span-5">
+          <div className="border-b border-white/5 pb-3">
             <h3 className="font-bold text-white text-sm flex items-center gap-2">
               <Plus className="w-4 h-4 text-amber-400" />
               <span>{t("addExpenseBtn")}</span>
@@ -222,8 +222,8 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
         </div>
 
         {/* Right: Expense List */}
-        <div className="lg:col-span-7 bg-zinc-900 border border-zinc-800 rounded-3xl p-5 shadow-xl space-y-3">
-          <div className="border-b border-zinc-800 pb-3 flex items-center justify-between">
+        <div className="space-y-3 rounded-2xl bg-zinc-900/60 p-5 shadow-xl shadow-black/20 ring-1 ring-white/5 lg:col-span-7">
+          <div className="flex items-center justify-between border-b border-white/5 pb-3">
             <h3 className="font-bold text-white text-sm">
               {lang === "bn" ? "খরচের তালিকা" : "Expense Records"}
             </h3>

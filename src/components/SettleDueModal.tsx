@@ -93,7 +93,7 @@ export function SettleDueModal({ customer, isOpen, onClose, onSuccess }: SettleD
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="w-full max-w-md rounded-3xl bg-zinc-900 border border-zinc-800 shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl bg-zinc-900 ring-1 ring-white/10 shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/60">
           <div className="flex items-center gap-2.5 text-emerald-400 font-bold">

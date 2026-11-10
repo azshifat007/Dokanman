@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Search, UserPlus, UserCheck, X, Phone } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
-import { searchCustomersAction } from "@/actions/pos-actions";
 import { Customer } from "@/types";
 import { NewCustomerModal } from "./NewCustomerModal";
 import { useLanguage } from "@/context/LanguageContext";
@@ -16,7 +15,7 @@ export function UniversalSearch({ initialCustomers }: UniversalSearchProps) {
   const { selectedCustomer, selectCustomer } = useCartStore();
   const { t, formatCurrency } = useLanguage();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Customer[]>(initialCustomers);
+  const [extraCustomers, setExtraCustomers] = useState<Customer[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -31,25 +30,24 @@ export function UniversalSearch({ initialCustomers }: UniversalSearchProps) {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  useEffect(() => {
-    let active = true;
-    const fetchMatches = async () => {
-      if (!query.trim()) {
-        setResults(initialCustomers);
-        return;
-      }
-      const res = await searchCustomersAction(query);
-      if (active && res.success && res.customers) {
-        setResults(res.customers as unknown as Customer[]);
-      }
-    };
+  // Every customer already ships with the page, so filtering happens locally with
+  // zero latency; the list is capped for rendering only.
+  const allCustomers = useMemo(
+    () => [...extraCustomers, ...initialCustomers],
+    [extraCustomers, initialCustomers]
+  );
 
-    const timer = setTimeout(fetchMatches, 150);
-    return () => {
-      active = false;
-      clearTimeout(timer);
-    };
-  }, [query, initialCustomers]);
+  const results = useMemo(() => {
+    const trimmed = query.trim().toLowerCase();
+    if (!trimmed) return allCustomers.slice(0, 15);
+    return allCustomers
+      .filter(
+        (customer) =>
+          customer.name.toLowerCase().includes(trimmed) ||
+          (customer.phone || "").includes(trimmed)
+      )
+      .slice(0, 15);
+  }, [allCustomers, query]);
 
   const handleSelect = (customer: Customer) => {
     selectCustomer(customer);
@@ -106,6 +104,7 @@ export function UniversalSearch({ initialCustomers }: UniversalSearchProps) {
             <div className="relative flex items-center">
               <Search className="absolute left-3.5 w-4 h-4 text-zinc-400 pointer-events-none" />
               <input
+                id="customer-search"
                 type="text"
                 value={query}
                 onFocus={() => setIsOpen(true)}
@@ -113,8 +112,16 @@ export function UniversalSearch({ initialCustomers }: UniversalSearchProps) {
                   setQuery(e.target.value);
                   setIsOpen(true);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setQuery("");
+                    setIsOpen(false);
+                    e.currentTarget.blur();
+                  }
+                }}
                 placeholder={t("searchCustomerPlaceholder")}
-                className="w-full pl-10 pr-28 py-3 bg-zinc-900 border border-zinc-700/80 rounded-2xl text-white placeholder-zinc-400 focus:outline-hidden focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-sm transition-all"
+                autoComplete="off"
+                className="w-full rounded-2xl border border-white/10 bg-zinc-900/80 py-3 pl-10 pr-28 text-sm text-white placeholder-zinc-500 transition-all focus:border-amber-500 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20"
               />
               <button
                 type="button"
@@ -209,7 +216,7 @@ export function UniversalSearch({ initialCustomers }: UniversalSearchProps) {
         onClose={() => setIsModalOpen(false)}
         onCustomerCreated={(customer) => {
           selectCustomer(customer);
-          setResults((prev) => [customer, ...prev]);
+          setExtraCustomers((prev) => [customer, ...prev]);
         }}
       />
     </>

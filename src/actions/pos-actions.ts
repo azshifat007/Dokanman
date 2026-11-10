@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { users, customers, products, orders, orderItems, transactions, expenses } from "@/db/schema";
-import { eq, ilike, or, and, desc, inArray } from "drizzle-orm";
+import { eq, ilike, or, and, desc, inArray, gte, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { requireAuthUser } from "@/lib/auth";
 
@@ -370,77 +370,170 @@ export async function deleteProductAction(productId: string) {
   }
 }
 
+/** Local YYYY-MM-DD key, matching how the app groups days (shop-local midnight). */
+function localDayKey(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
+    date.getDate()
+  ).padStart(2, "0")}`;
+}
+
 export async function getDashboardInitialData() {
   const userId = await getActiveUserId();
 
-  // 1. Shop Vendor Details
-  const [shopUser] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-
-  // 2. Quick Access Products
-  const quickProducts = await db
-    .select()
-    .from(products)
-    .where(eq(products.userId, userId))
-    .orderBy(products.name);
-
-  // 3. Customers list
-  const initialCustomers = await db
-    .select()
-    .from(customers)
-    .where(eq(customers.userId, userId))
-    .orderBy(desc(customers.totalDue));
-
-  // 4. Financial Statistics
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const userOrders = await db
-    .select()
-    .from(orders)
-    .where(eq(orders.userId, userId));
+  // The dashboard only needs the current week, so every aggregate query below is
+  // bounded instead of scanning the vendor's whole history.
+  const weekStart = new Date(today);
+  weekStart.setDate(weekStart.getDate() - 6);
+
+  const [shopUser] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+
+  const [
+    quickProducts,
+    initialCustomers,
+    weekOrders,
+    weekPayments,
+    weekExpenses,
+    recentOrderRows,
+    topProductRows,
+    expenseList,
+  ] = await Promise.all([
+      db.select().from(products).where(eq(products.userId, userId)).orderBy(products.name),
+      db.select().from(customers).where(eq(customers.userId, userId)).orderBy(desc(customers.totalDue)),
+      db
+        .select({
+          totalAmount: orders.totalAmount,
+          paidAmount: orders.paidAmount,
+          dueAmount: orders.dueAmount,
+          createdAt: orders.createdAt,
+        })
+        .from(orders)
+        .where(and(eq(orders.userId, userId), gte(orders.createdAt, weekStart))),
+      db
+        .select({ amount: transactions.amount, createdAt: transactions.createdAt })
+        .from(transactions)
+        .where(
+          and(
+            eq(transactions.userId, userId),
+            eq(transactions.type, "PAYMENT"),
+            gte(transactions.createdAt, weekStart)
+          )
+        ),
+      db
+        .select({ amount: expenses.amount, createdAt: expenses.createdAt })
+        .from(expenses)
+        .where(and(eq(expenses.userId, userId), gte(expenses.createdAt, weekStart)))
+        .orderBy(desc(expenses.createdAt)),
+      db
+        .select({
+          id: orders.id,
+          customerName: customers.name,
+          totalAmount: orders.totalAmount,
+          paidAmount: orders.paidAmount,
+          dueAmount: orders.dueAmount,
+          status: orders.status,
+          createdAt: orders.createdAt,
+        })
+        .from(orders)
+        .leftJoin(customers, eq(orders.customerId, customers.id))
+        .where(eq(orders.userId, userId))
+        .orderBy(desc(orders.createdAt))
+        .limit(6),
+      db
+        .select({
+          name: orderItems.productName,
+          quantity: sql<string>`sum(${orderItems.quantity})`,
+          revenue: sql<string>`sum(${orderItems.subtotal})`,
+        })
+        .from(orderItems)
+        .innerJoin(orders, eq(orderItems.orderId, orders.id))
+        .where(and(eq(orders.userId, userId), gte(orders.createdAt, weekStart)))
+        .groupBy(orderItems.productName)
+        .orderBy(desc(sql`sum(${orderItems.quantity})`))
+        .limit(4),
+      db
+        .select()
+        .from(expenses)
+        .where(eq(expenses.userId, userId))
+        .orderBy(desc(expenses.createdAt))
+        .limit(200),
+    ]);
+
+  // Build the 7-day series (oldest first) from the bounded rows we already have.
+  const daily = Array.from({ length: 7 }, (_, index) => {
+    const day = new Date(today);
+    day.setDate(day.getDate() - (6 - index));
+    return { date: localDayKey(day), cash: 0, credit: 0, expense: 0 };
+  });
+  const byDay = new Map(daily.map((point) => [point.date, point]));
+
+  const todayKey = localDayKey(today);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayKey = localDayKey(yesterday);
 
   let todayCash = 0;
   let todayDue = 0;
   let todayOrdersCount = 0;
+  let todaySales = 0;
+  let weekSales = 0;
+  let weekCash = 0;
+  let yesterdayCash = 0;
 
-  for (const ord of userOrders) {
-    const orderDate = new Date(ord.createdAt);
-    if (orderDate >= today) {
-      todayCash += parseFloat(ord.paidAmount || "0");
-      todayDue += parseFloat(ord.dueAmount || "0");
+  for (const ord of weekOrders) {
+    const createdAt = new Date(ord.createdAt);
+    const key = localDayKey(createdAt);
+    const paid = parseFloat(ord.paidAmount || "0");
+    const due = parseFloat(ord.dueAmount || "0");
+    const total = parseFloat(ord.totalAmount || "0");
+
+    weekSales += total;
+    weekCash += paid;
+
+    const point = byDay.get(key);
+    if (point) {
+      point.cash += paid;
+      point.credit += due;
+    }
+
+    if (key === todayKey) {
+      todayCash += paid;
+      todayDue += due;
       todayOrdersCount += 1;
+      todaySales += total;
+    } else if (key === yesterdayKey) {
+      yesterdayCash += paid;
     }
   }
 
-  // Include direct cash payments from settleCustomerDueAction today
-  const userTransactions = await db
-    .select()
-    .from(transactions)
-    .where(eq(transactions.userId, userId));
+  // Direct cash payments from settleCustomerDueAction count as cash-in too.
+  for (const tx of weekPayments) {
+    const createdAt = new Date(tx.createdAt);
+    const key = localDayKey(createdAt);
+    const amount = parseFloat(tx.amount || "0");
 
-  for (const tx of userTransactions) {
-    const txDate = new Date(tx.createdAt);
-    if (txDate >= today && tx.type === "PAYMENT") {
-      todayCash += parseFloat(tx.amount || "0");
-    }
+    weekCash += amount;
+    const point = byDay.get(key);
+    if (point) point.cash += amount;
+
+    if (key === todayKey) todayCash += amount;
+    else if (key === yesterdayKey) yesterdayCash += amount;
   }
-
-  // Today's Expenses
-  const userExpenses = await db
-    .select()
-    .from(expenses)
-    .where(eq(expenses.userId, userId))
-    .orderBy(desc(expenses.createdAt));
 
   let todayExpense = 0;
-  for (const exp of userExpenses) {
-    const expDate = new Date(exp.createdAt);
-    if (expDate >= today) {
-      todayExpense += parseFloat(exp.amount || "0");
-    }
+  for (const exp of weekExpenses) {
+    const createdAt = new Date(exp.createdAt);
+    const key = localDayKey(createdAt);
+    const amount = parseFloat(exp.amount || "0");
+
+    const point = byDay.get(key);
+    if (point) point.expense += amount;
+
+    if (key === todayKey) todayExpense += amount;
   }
 
-  // Total active store credit across all customers
   const totalActiveDue = initialCustomers.reduce(
     (sum, c) => sum + parseFloat(c.totalDue || "0"),
     0
@@ -450,14 +543,46 @@ export async function getDashboardInitialData() {
     shop: shopUser,
     products: quickProducts,
     customers: initialCustomers,
-    expenses: userExpenses,
+    expenses: expenseList,
     stats: {
       todayCash,
       todayDue,
       totalActiveDue,
       todayOrdersCount,
       todayExpense,
-      todayNetProfit: Math.max(0, todayCash - todayExpense),
+      todayNetProfit: todayCash - todayExpense,
+    },
+    insights: {
+      daily,
+      recentSales: recentOrderRows.map((row) => ({
+        id: row.id,
+        customerName: row.customerName ?? null,
+        totalAmount: parseFloat(row.totalAmount || "0"),
+        paidAmount: parseFloat(row.paidAmount || "0"),
+        dueAmount: parseFloat(row.dueAmount || "0"),
+        status: row.status,
+        createdAt: new Date(row.createdAt).toISOString(),
+      })),
+      topDebtors: initialCustomers
+        .slice(0, 5)
+        .filter((c) => parseFloat(c.totalDue || "0") > 0)
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          phone: c.phone,
+          due: parseFloat(c.totalDue || "0"),
+        })),
+      topProducts: topProductRows.map((row) => ({
+        name: row.name,
+        quantity: Number(row.quantity || 0),
+        revenue: parseFloat(row.revenue || "0"),
+      })),
+      weekSales,
+      weekCash,
+      yesterdayCash,
+      customerCount: initialCustomers.length,
+      productCount: quickProducts.length,
+      averageSale: todayOrdersCount > 0 ? todaySales / todayOrdersCount : 0,
     },
   };
 }

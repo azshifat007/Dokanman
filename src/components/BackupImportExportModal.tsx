@@ -191,7 +191,7 @@ export function BackupImportExportModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="w-full max-w-lg rounded-3xl bg-zinc-900 border border-zinc-800 shadow-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-lg rounded-2xl bg-zinc-900 ring-1 ring-white/10 shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/70">
           <div className="flex items-center gap-2 text-amber-400 font-bold">
@@ -200,7 +200,8 @@ export function BackupImportExportModal({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800"
+            aria-label={t("cancel")}
+            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>

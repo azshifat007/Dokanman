@@ -69,6 +69,8 @@ export interface Expense {
   createdAt: Date | string;
 }
 
+export type AppTab = "dashboard" | "pos" | "ledger" | "expenses";
+
 export interface DashboardStats {
   todayCash: number;
   todayDue: number;
@@ -76,4 +78,35 @@ export interface DashboardStats {
   todayOrdersCount: number;
   todayExpense: number;
   todayNetProfit: number;
+}
+
+/** One entry of the 7-day sales trend shown on the dashboard. `date` is a local YYYY-MM-DD key. */
+export interface DailySalesPoint {
+  date: string;
+  cash: number;
+  credit: number;
+  expense: number;
+}
+
+export interface RecentSale {
+  id: string;
+  customerName: string | null;
+  totalAmount: number;
+  paidAmount: number;
+  dueAmount: number;
+  status: "PAID" | "DUE" | "PARTIAL";
+  createdAt: string;
+}
+
+export interface DashboardInsights {
+  daily: DailySalesPoint[];
+  recentSales: RecentSale[];
+  topDebtors: Array<{ id: string; name: string; phone: string | null; due: number }>;
+  topProducts: Array<{ name: string; quantity: number; revenue: number }>;
+  weekSales: number;
+  weekCash: number;
+  yesterdayCash: number;
+  customerCount: number;
+  productCount: number;
+  averageSale: number;
 }

@@ -119,11 +119,11 @@ export function CartPanel() {
   };
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-3xl shadow-xl overflow-hidden flex flex-col h-full">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-zinc-900/60 ring-1 ring-white/5 shadow-xl shadow-black/20">
       {/* Panel Top Header */}
-      <div className="p-4 border-b border-zinc-800 bg-zinc-950/60 flex items-center justify-between">
+      <div className="flex items-center justify-between border-b border-white/5 bg-black/20 p-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/20">
             <Receipt className="w-4 h-4" />
           </div>
           <div>
@@ -165,7 +165,7 @@ export function CartPanel() {
 
       {/* Customer Status Banner if selected */}
       {selectedCustomer && (
-        <div className="px-4 py-2.5 bg-zinc-800/40 border-b border-zinc-800 flex items-center justify-between text-xs">
+        <div className="flex items-center justify-between border-b border-white/5 bg-white/[0.03] px-4 py-2.5 text-xs">
           <div className="flex items-center gap-1.5 text-zinc-300">
             <span className="text-zinc-400">{lang === "bn" ? "খাতাদার:" : "Customer:"}</span>
             <span className="font-bold text-amber-400">{selectedCustomer.name}</span>
@@ -191,7 +191,7 @@ export function CartPanel() {
           items.map((item) => (
             <div
               key={item.productId}
-              className="flex items-center justify-between p-2.5 bg-zinc-800/60 border border-zinc-700/50 rounded-2xl text-xs group"
+              className="group flex items-center justify-between rounded-xl bg-white/[0.03] p-2.5 text-xs ring-1 ring-white/5"
             >
               <div className="flex-1 min-w-0 pr-2">
                 <div className="font-bold text-white truncate text-xs sm:text-sm">
@@ -287,7 +287,7 @@ export function CartPanel() {
       </div>
 
       {/* Bill Calculation & Settlement Section */}
-      <div className="border-t border-zinc-800 bg-zinc-950/80 p-4 space-y-3.5">
+      <div className="space-y-3.5 border-t border-white/5 bg-black/20 p-4">
         {/* Subtotal, Previous Due & Net Calculation */}
         <div className="space-y-1.5 text-xs">
           <div className="flex justify-between text-zinc-300">
