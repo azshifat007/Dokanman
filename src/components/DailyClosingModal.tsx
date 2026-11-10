@@ -26,6 +26,15 @@ export function DailyClosingModal({ isOpen, onClose, shopName, stats }: DailyClo
   const netCashInDrawer = stats.todayCash - stats.todayExpense;
 
   const handlePrint = () => {
+    // body.print-mode narrows the printout to .print-area (the slip) and forces
+    // black-on-white, so the dark app shell behind this modal is not printed.
+    const cleanup = () => {
+      document.body.classList.remove("print-mode");
+      window.removeEventListener("afterprint", cleanup);
+    };
+
+    document.body.classList.add("print-mode");
+    window.addEventListener("afterprint", cleanup);
     window.print();
   };
 
@@ -64,7 +73,7 @@ export function DailyClosingModal({ isOpen, onClose, shopName, stats }: DailyClo
         </div>
 
         {/* Printable Thermal Slip Design */}
-        <div className="p-6 space-y-4 bg-white/90 dark:bg-zinc-950/90 text-zinc-900 dark:text-white font-mono text-xs border-b border-zinc-200 dark:border-zinc-800">
+        <div className="print-area p-6 space-y-4 bg-white/90 dark:bg-zinc-950/90 text-zinc-900 dark:text-white font-mono text-xs border-b border-zinc-200 dark:border-zinc-800">
           <div className="text-center pb-3 border-b border-dashed border-zinc-300 dark:border-zinc-700 space-y-1">
             <h3 className="font-bold text-base text-zinc-900 dark:text-white tracking-wide">{shopName}</h3>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400">{todayStr}</p>

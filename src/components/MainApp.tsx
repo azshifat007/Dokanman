@@ -15,6 +15,7 @@ import { BackupImportExportModal } from "./BackupImportExportModal";
 import { ProductCatalogModal } from "./ProductCatalogModal";
 import { SettingsModal } from "./SettingsModal";
 import { SettleDueModal } from "./SettleDueModal";
+import { SalesHistoryModal } from "./SalesHistoryModal";
 import { logoutAction } from "@/actions/auth-actions";
 import { AppTab, Customer, Product, DashboardStats, DashboardInsights, Expense } from "@/types";
 import { useCartStore } from "@/store/useCartStore";
@@ -48,6 +49,7 @@ function MainAppContent({
   const [isBackupOpen, setIsBackupOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSalesHistoryOpen, setIsSalesHistoryOpen] = useState(false);
   const [settleCustomer, setSettleCustomer] = useState<Customer | null>(null);
   const { selectCustomer, items, getSubtotal } = useCartStore();
   const { lang, t, formatCurrency } = useLanguage();
@@ -140,6 +142,7 @@ function MainAppContent({
               onOpenDailySlip={() => setIsDailySlipOpen(true)}
               onOpenBackup={() => setIsBackupOpen(true)}
               onOpenProducts={() => setIsProductsOpen(true)}
+              onOpenSalesHistory={() => setIsSalesHistoryOpen(true)}
             />
           ) : tab === "pos" ? (
             <div className="space-y-4">
@@ -246,6 +249,11 @@ function MainAppContent({
           setSettleCustomer(null);
           router.refresh();
         }}
+      />
+
+      <SalesHistoryModal
+        isOpen={isSalesHistoryOpen}
+        onClose={() => setIsSalesHistoryOpen(false)}
       />
     </div>
   );

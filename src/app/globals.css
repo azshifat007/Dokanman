@@ -137,3 +137,47 @@ body {
     animation: none;
   }
 }
+
+/*
+ * Printing: only the element marked .print-area is sent to the printer, in
+ * black on white. The day slip toggles body.print-mode around window.print()
+ * so the dark app shell behind the modal never reaches paper.
+ */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  body.print-mode * {
+    visibility: hidden;
+  }
+
+  body.print-mode .print-area,
+  body.print-mode .print-area * {
+    visibility: visible;
+  }
+
+  body.print-mode .print-area {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  body.print-mode .print-area * {
+    background: transparent !important;
+    color: #000 !important;
+    border-color: #9ca3af !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    margin: 10mm;
+  }
+}

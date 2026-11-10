@@ -14,7 +14,8 @@ import {
   Candy,
   Cigarette,
   ShoppingBag,
-  Coins
+  Coins,
+  Search,
 } from "lucide-react";
 
 interface ExpenseTrackerProps {
@@ -48,11 +49,28 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [range, setRange] = useState<7 | 30 | 0>(7);
+  const [search, setSearch] = useState("");
 
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
   const todaysExpenses = expensesList.filter((e) => new Date(e.createdAt) >= todayStart);
   const totalExpense = todaysExpenses.reduce((sum, e) => sum + parseFloat(e.amount || "0"), 0);
+
+  // The record list can span months, so let the shop narrow it to a period and
+  // search by category or note instead of scrolling the full history.
+  const rangeStart = new Date(todayStart);
+  if (range > 0) rangeStart.setDate(rangeStart.getDate() - (range - 1));
+  const query = search.trim().toLowerCase();
+  const visibleExpenses = expensesList.filter((expense) => {
+    if (range > 0 && new Date(expense.createdAt) < rangeStart) return false;
+    if (!query) return true;
+    return (
+      expense.category.toLowerCase().includes(query) ||
+      (expense.note ? expense.note.toLowerCase().includes(query) : false)
+    );
+  });
+  const visibleTotal = visibleExpenses.reduce((sum, expense) => sum + parseFloat(expense.amount || "0"), 0);
 
   const handleAddExpense = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,17 +246,51 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
               {lang === "bn" ? "খরচের তালিকা" : "Expense Records"}
             </h3>
             <span className="text-xs text-zinc-600 dark:text-zinc-400 font-mono">
-              {expensesList.length} {lang === "bn" ? "টি এন্ট্রি" : "entries"}
+              {visibleExpenses.length} {lang === "bn" ? "টি এন্ট্রি" : "entries"} • {formatCurrency(visibleTotal)}
             </span>
           </div>
 
+          <div className="space-y-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-zinc-500" />
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={lang === "bn" ? "খরচ খুঁজুন..." : "Search expenses..."}
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-xs text-zinc-900 dark:text-white placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-1.5">
+              {([7, 30, 0] as const).map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setRange(value)}
+                  aria-pressed={range === value}
+                  className={`rounded-xl border px-2 py-1.5 text-[11px] font-bold transition-colors ${
+                    range === value
+                      ? "border-amber-500 bg-amber-500 text-zinc-950"
+                      : "border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-amber-500/60"
+                  }`}
+                >
+                  {value === 7
+                    ? lang === "bn" ? "৭ দিন" : "7 days"
+                    : value === 30
+                      ? lang === "bn" ? "৩০ দিন" : "30 days"
+                      : lang === "bn" ? "সব" : "All"}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="divide-y divide-zinc-200 dark:divide-zinc-800/80 max-h-[500px] overflow-y-auto">
-            {expensesList.length === 0 ? (
+            {visibleExpenses.length === 0 ? (
               <div className="py-12 text-center text-zinc-500 text-xs">
                 {t("noExpensesYet")}
               </div>
             ) : (
-              expensesList.map((exp) => (
+              visibleExpenses.map((exp) => (
                 <div
                   key={exp.id}
                   className="py-3 flex items-center justify-between gap-3 group"
@@ -248,7 +300,15 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
                     <div className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
                       {exp.note && <span className="mr-2 text-zinc-700 dark:text-zinc-300">{exp.note}</span>}
                       <span className="text-[11px] text-zinc-500">
-                        {new Date(exp.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        {new Date(exp.createdAt) >= todayStart
+                          ? new Date(exp.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                          : new Date(exp.createdAt).toLocaleString(lang === "bn" ? "bn-BD" : "en-US", {
+                              day: "numeric",
+                              month: "short",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: false,
+                            })}
                       </span>
                     </div>
                   </div>

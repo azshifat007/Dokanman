@@ -9,6 +9,7 @@ import {
   Coffee,
   FileSpreadsheet,
   FileText,
+  History,
   Package,
   Plus,
   Receipt,
@@ -28,6 +29,7 @@ interface DashboardProps {
   onOpenDailySlip: () => void;
   onOpenBackup: () => void;
   onOpenProducts: () => void;
+  onOpenSalesHistory: () => void;
   customers: Customer[];
 }
 
@@ -129,6 +131,7 @@ export function Dashboard({
   onOpenDailySlip,
   onOpenBackup,
   onOpenProducts,
+  onOpenSalesHistory,
   customers,
 }: DashboardProps) {
   const { lang, t, formatCurrency } = useLanguage();
@@ -329,7 +332,7 @@ export function Dashboard({
               action={
                 <button
                   type="button"
-                  onClick={() => onNavigate("ledger")}
+                  onClick={onOpenSalesHistory}
                   className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300"
                 >
                   {t("seeAll")}
@@ -484,6 +487,7 @@ export function Dashboard({
                 { label: t("newSaleBtn"), icon: <Plus className="h-4 w-4" />, onClick: () => onNavigate("pos"), tone: "text-amber-700 dark:text-amber-300" },
                 { label: t("tabLedger"), icon: <BookOpen className="h-4 w-4" />, onClick: () => onNavigate("ledger"), tone: "text-rose-600 dark:text-rose-300" },
                 { label: t("addExpenseShort"), icon: <Receipt className="h-4 w-4" />, onClick: () => onNavigate("expenses"), tone: "text-emerald-700 dark:text-emerald-300" },
+                { label: t("salesLogTitle"), icon: <History className="h-4 w-4" />, onClick: onOpenSalesHistory, tone: "text-sky-700 dark:text-sky-300" },
                 { label: t("navProducts"), icon: <Package className="h-4 w-4" />, onClick: onOpenProducts, tone: "text-cyan-700 dark:text-cyan-300" },
                 { label: t("navSlip"), icon: <FileText className="h-4 w-4" />, onClick: onOpenDailySlip, tone: "text-amber-700 dark:text-amber-300" },
                 { label: t("navBackup"), icon: <FileSpreadsheet className="h-4 w-4" />, onClick: onOpenBackup, tone: "text-emerald-700 dark:text-emerald-300" },

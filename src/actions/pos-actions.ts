@@ -293,6 +293,96 @@ export async function getCustomerLedgerAction(customerId: string) {
   }
 }
 
+/**
+ * Sales log for the shop: orders in the last `days` days with their line items,
+ * newest first. `days` is clamped so a client cannot ask for the whole history at
+ * once; 0 means "all time" capped by the row limit below.
+ */
+export async function getSalesHistoryAction(days: number) {
+  try {
+    const userId = await getActiveUserId();
+    const range = Number.isFinite(days) ? Math.min(Math.max(Math.trunc(days), 0), 365) : 7;
+
+    const since = new Date();
+    since.setHours(0, 0, 0, 0);
+    if (range > 0) since.setDate(since.getDate() - (range - 1));
+
+    const where = range > 0
+      ? and(eq(orders.userId, userId), gte(orders.createdAt, since))
+      : eq(orders.userId, userId);
+
+    const orderRows = await db
+      .select({
+        id: orders.id,
+        customerName: customers.name,
+        customerPhone: customers.phone,
+        totalAmount: orders.totalAmount,
+        paidAmount: orders.paidAmount,
+        dueAmount: orders.dueAmount,
+        status: orders.status,
+        createdAt: orders.createdAt,
+      })
+      .from(orders)
+      .leftJoin(customers, eq(orders.customerId, customers.id))
+      .where(where)
+      .orderBy(desc(orders.createdAt))
+      .limit(200);
+
+    const orderIds = orderRows.map((order) => order.id);
+    const itemRows = orderIds.length
+      ? await db
+          .select({
+            orderId: orderItems.orderId,
+            productName: orderItems.productName,
+            quantity: orderItems.quantity,
+            unitPrice: orderItems.unitPrice,
+            subtotal: orderItems.subtotal,
+          })
+          .from(orderItems)
+          .where(inArray(orderItems.orderId, orderIds))
+      : [];
+
+    const itemsByOrder = new Map<string, typeof itemRows>();
+    for (const item of itemRows) {
+      const list = itemsByOrder.get(item.orderId);
+      if (list) list.push(item);
+      else itemsByOrder.set(item.orderId, [item]);
+    }
+
+    const salesLog = orderRows.map((order) => ({
+      ...order,
+      createdAt: order.createdAt.toISOString(),
+      items: (itemsByOrder.get(order.id) ?? []).map((item) => ({
+        productName: item.productName,
+        quantity: item.quantity,
+        unitPrice: Number(item.unitPrice),
+        subtotal: Number(item.subtotal),
+      })),
+    }));
+
+    const totals = salesLog.reduce(
+      (acc, order) => {
+        acc.total += Number(order.totalAmount);
+        acc.cash += Number(order.paidAmount);
+        acc.due += Number(order.dueAmount);
+        return acc;
+      },
+      { total: 0, cash: 0, due: 0 }
+    );
+
+    return { success: true as const, orders: salesLog, totals, days: range };
+  } catch (err: unknown) {
+    console.error("getSalesHistoryAction error:", err);
+    return {
+      success: false as const,
+      error: err instanceof Error ? err.message : "বিক্রির তালিকা লোড করা যায়নি",
+      orders: [],
+      totals: { total: 0, cash: 0, due: 0 },
+      days: 0,
+    };
+  }
+}
+
 export async function updateProductPriceAction(productId: string, newPrice: number) {
   try {
     const userId = await getActiveUserId();
