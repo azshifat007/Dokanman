@@ -3,9 +3,12 @@ import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 import * as dotenv from "dotenv";
 
-if (typeof window === "undefined") {
-  dotenv.config({ path: ".env.local" });
-  dotenv.config({ path: ".env" });
+// Next.js loads .env files itself; dotenv is only needed for standalone tsx
+// scripts. Skipping it in production avoids dotenv's stderr banner polluting
+// deployed logs on every cold start.
+if (typeof window === "undefined" && process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: ".env.local", quiet: true });
+  dotenv.config({ path: ".env", quiet: true });
 }
 
 function getDb() {

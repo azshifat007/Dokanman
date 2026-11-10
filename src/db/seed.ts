@@ -4,8 +4,8 @@ import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import * as dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
-dotenv.config({ path: ".env" });
+dotenv.config({ path: ".env.local", quiet: true });
+dotenv.config({ path: ".env", quiet: true });
 
 async function seed() {
   console.log("Seeding Dokanman database...");

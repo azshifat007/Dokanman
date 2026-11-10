@@ -3,8 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
-dotenv.config({ path: ".env" });
+dotenv.config({ path: ".env.local", quiet: true });
+dotenv.config({ path: ".env", quiet: true });
 
 // Drizzle migrations are not written idempotently, so statements that already exist
 // (e.g. from an earlier `drizzle-kit push`) are skipped instead of aborting the run.
