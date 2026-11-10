@@ -165,6 +165,17 @@ export const translations = {
     deleteProduct: "পণ্য মুছে ফেলুন",
     quickMenuBadge: "কুইক",
     noProductsYet: "এখনো কোনো পণ্য যোগ করা হয়নি।",
+    productIconLabel: "পণ্যের আইকন",
+    productIconAuto: "নাম দেখে অটো",
+    productIconChosen: "নির্বাচিত",
+    changeProductIcon: "আইকন পরিবর্তন করুন",
+    chooseProductIcon: "নতুন আইকন বেছে নিন",
+
+    // Customers
+    editCustomer: "কাস্টমারের তথ্য সম্পাদনা করুন",
+    editCustomerTitle: "কাস্টমার এডিট ও ডিলিট",
+    deleteCustomerBtn: "কাস্টমার মুছে ফেলুন",
+    currentDueLabel: "বর্তমান বকেয়া",
 
     // Navigation buttons & footer
     navProducts: "পণ্য",
@@ -215,6 +226,9 @@ export const translations = {
     settingsPinSection: "পিন কোড পরিবর্তন",
     settingsShopName: "দোকানের নাম",
     settingsThemeSection: "ডে / নাইট মোড",
+    settingsAccentSection: "অ্যাকসেন্ট রঙ",
+    settingsAccentHint:
+      "দোকানের বাটন ও হাইলাইটের রঙ বেছে নিন। এই পছন্দ শুধু এই ডিভাইসে সেভ থাকে।",
     themeAuto: "স্বয়ংক্রিয়",
     themeDay: "দিন",
     themeNight: "রাত",
@@ -401,6 +415,17 @@ export const translations = {
     deleteProduct: "Delete product",
     quickMenuBadge: "Quick",
     noProductsYet: "No products added yet.",
+    productIconLabel: "Product icon",
+    productIconAuto: "Auto from name",
+    productIconChosen: "Selected",
+    changeProductIcon: "Change icon",
+    chooseProductIcon: "Choose a new icon",
+
+    // Customers
+    editCustomer: "Edit customer details",
+    editCustomerTitle: "Edit or delete customer",
+    deleteCustomerBtn: "Delete customer",
+    currentDueLabel: "Current due",
 
     // Navigation buttons & footer
     navProducts: "Products",
@@ -451,6 +476,9 @@ export const translations = {
     settingsPinSection: "Change PIN Code",
     settingsShopName: "Shop Name",
     settingsThemeSection: "Day / Night Mode",
+    settingsAccentSection: "Accent Colour",
+    settingsAccentHint:
+      "Pick the colour used for buttons and highlights. This choice is saved on this device only.",
     themeAuto: "Automatic",
     themeDay: "Day",
     themeNight: "Night",

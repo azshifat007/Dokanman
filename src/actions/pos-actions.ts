@@ -261,6 +261,69 @@ export async function createCustomerAction(data: { name: string; phone?: string;
   }
 }
 
+export async function updateCustomerAction(data: { id: string; name: string; phone?: string }) {
+  try {
+    const userId = await getActiveUserId();
+    const name = data.name.trim();
+
+    if (!name) {
+      return { success: false, error: "কাস্টমারের নাম লিখুন" };
+    }
+
+    const [updated] = await db
+      .update(customers)
+      .set({ name, phone: data.phone?.trim() || null })
+      .where(and(eq(customers.id, data.id), eq(customers.userId, userId)))
+      .returning();
+
+    if (!updated) {
+      return { success: false, error: "কাস্টমার পাওয়া যায়নি" };
+    }
+
+    revalidatePath("/");
+    revalidatePath("/customers");
+
+    return { success: true, customer: updated };
+  } catch (err: unknown) {
+    console.error("updateCustomerAction error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "কাস্টমারের তথ্য সেভ করতে সমস্যা হয়েছে",
+    };
+  }
+}
+
+/**
+ * Removes a customer with their credit ledger. Past orders stay in the sales log
+ * (orders.customer_id is set to null), and the transactions tied to them are
+ * cascaded away by the schema, so the shop's outstanding total drops by the due.
+ */
+export async function deleteCustomerAction(customerId: string) {
+  try {
+    const userId = await getActiveUserId();
+
+    const [existing] = await db
+      .select({ id: customers.id })
+      .from(customers)
+      .where(and(eq(customers.id, customerId), eq(customers.userId, userId)))
+      .limit(1);
+
+    if (!existing) {
+      return { success: false, error: "কাস্টমার পাওয়া যায়নি" };
+    }
+
+    await db.delete(customers).where(and(eq(customers.id, customerId), eq(customers.userId, userId)));
+
+    revalidatePath("/");
+    revalidatePath("/customers");
+
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("deleteCustomerAction error:", err);
+    return { success: false, error: "কাস্টমার মুছতে সমস্যা হয়েছে" };
+  }
+}
+
 export async function getCustomerLedgerAction(customerId: string) {
   try {
     const userId = await getActiveUserId();
@@ -383,6 +446,22 @@ export async function getSalesHistoryAction(days: number) {
   }
 }
 
+export async function updateProductIconAction(productId: string, icon: string | null) {
+  try {
+    const userId = await getActiveUserId();
+    await db
+      .update(products)
+      .set({ icon })
+      .where(and(eq(products.id, productId), eq(products.userId, userId)));
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("updateProductIconAction error:", err);
+    return { success: false, error: "পণ্যের আইকন পরিবর্তন করতে সমস্যা হয়েছে" };
+  }
+}
+
 export async function updateProductPriceAction(productId: string, newPrice: number) {
   try {
     const userId = await getActiveUserId();
@@ -399,7 +478,12 @@ export async function updateProductPriceAction(productId: string, newPrice: numb
   }
 }
 
-export async function addProductAction(data: { name: string; price: number; isQuickAccess?: boolean }) {
+export async function addProductAction(data: {
+  name: string;
+  price: number;
+  isQuickAccess?: boolean;
+  icon?: string | null;
+}) {
   try {
     const userId = await getActiveUserId();
     const id = `prod_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -411,6 +495,7 @@ export async function addProductAction(data: { name: string; price: number; isQu
         name: data.name.trim(),
         price: data.price.toFixed(2),
         isQuickAccess: data.isQuickAccess !== false ? "true" : "false",
+        icon: data.icon || null,
       })
       .returning();
 
@@ -441,16 +526,28 @@ export async function toggleProductQuickAccessAction(productId: string, isQuickA
 export async function deleteProductAction(productId: string) {
   try {
     const userId = await getActiveUserId();
-    await db
-      .delete(products)
-      .where(and(eq(products.id, productId), eq(products.userId, userId)));
 
-    // Order items keep their historical product name snapshot; only the FK link is cleared.
+    const [existing] = await db
+      .select({ id: products.id })
+      .from(products)
+      .where(and(eq(products.id, productId), eq(products.userId, userId)))
+      .limit(1);
+
+    if (!existing) {
+      return { success: false, error: "পণ্যটি পাওয়া যায়নি" };
+    }
+
+    // order_items.product_id has no ON DELETE rule, so the historical rows must be
+    // unlinked first or Postgres rejects the delete. Their name snapshot stays
+    // intact. This is not wrapped in a transaction because the neon-http driver
+    // does not support them; unlink-then-delete is already the safe order.
     const ownOrderIds = db.select({ id: orders.id }).from(orders).where(eq(orders.userId, userId));
     await db
       .update(orderItems)
       .set({ productId: null })
       .where(and(eq(orderItems.productId, productId), inArray(orderItems.orderId, ownOrderIds)));
+
+    await db.delete(products).where(and(eq(products.id, productId), eq(products.userId, userId)));
 
     revalidatePath("/");
     return { success: true };

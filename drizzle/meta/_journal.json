@@ -15,6 +15,13 @@
       "when": 1794240222675,
       "tag": "0001_panoramic_stellaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794330437945,
+      "tag": "0002_graceful_maddog",
+      "breakpoints": true
     }
   ]
 }

@@ -16,9 +16,11 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   Receipt,
+  Pencil,
 } from "lucide-react";
 import { SettleDueModal } from "./SettleDueModal";
 import { NewCustomerModal } from "./NewCustomerModal";
+import { EditCustomerModal } from "./EditCustomerModal";
 import { getCustomerLedgerAction } from "@/actions/pos-actions";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -40,6 +42,7 @@ export function CustomerLedger({
   const [filterDueOnly, setFilterDueOnly] = useState(false);
   const [settleCustomer, setSettleCustomer] = useState<Customer | null>(null);
   const [isNewCustModalOpen, setIsNewCustModalOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [historyCustomer, setHistoryCustomer] = useState<Customer | null>(null);
   const [historyRows, setHistoryRows] = useState<Transaction[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -188,17 +191,28 @@ export function CustomerLedger({
                   </div>
 
                   {/* Due amount badge */}
-                  <div className="text-right">
-                    <span className="text-[10px] text-zinc-600 dark:text-zinc-400 block uppercase tracking-wider">
-                      {lang === "bn" ? "মোট বকেয়া" : "Total Due"}
-                    </span>
-                    <span
-                      className={`font-black font-mono text-lg sm:text-xl ${
-                        due > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-700 dark:text-emerald-400"
-                      }`}
+                  <div className="flex items-start gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setEditingCustomer(customer)}
+                      className="mt-0.5 p-1.5 rounded-lg text-zinc-500 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      title={t("editCustomer")}
+                      aria-label={t("editCustomer")}
                     >
-                      {formatCurrency(due)}
-                    </span>
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                    <div className="text-right">
+                      <span className="text-[10px] text-zinc-600 dark:text-zinc-400 block uppercase tracking-wider">
+                        {lang === "bn" ? "মোট বকেয়া" : "Total Due"}
+                      </span>
+                      <span
+                        className={`font-black font-mono text-lg sm:text-xl ${
+                          due > 0 ? "text-rose-600 dark:text-rose-400" : "text-emerald-700 dark:text-emerald-400"
+                        }`}
+                      >
+                        {formatCurrency(due)}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -283,6 +297,15 @@ export function CustomerLedger({
           onRefresh();
           onOpenCartForCustomer(c);
         }}
+      />
+
+      {/* Edit / delete customer */}
+      <EditCustomerModal
+        customer={editingCustomer}
+        isOpen={!!editingCustomer}
+        onClose={() => setEditingCustomer(null)}
+        onSaved={onRefresh}
+        onDeleted={onRefresh}
       />
 
       {/* Transaction history modal */}

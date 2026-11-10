@@ -11,15 +11,16 @@ Mobile-first digital ledger and fast sales counter for small tea stalls and groc
 - Zustand for the in-progress cart
 - Vercel Web Analytics (`@vercel/analytics`)
 - Day/night theme: a warm light palette between 06:00 and 18:00 device-local time and the dark palette otherwise, with a per-device Day/Night/Automatic override in Settings
+- Accent colour: the brand highlight colour (Amber, Sky, Indigo, Violet or Fuchsia) is chosen in Settings and saved per device; `globals.css` maps Tailwind's `amber-*` scale onto the `--accent-*` variables so no component hard-codes it
 
 ## Features
 
 - **POS counter** — quick item grid, customer search, cash / credit / partial payment, keyboard shortcuts (`/` to search, `Alt+1…4` for tabs).
-- **Bakhi khata (ledger)** — per-customer due balances, transaction history, WhatsApp/SMS due reminders, due collection.
+- **Bakhi khata (ledger)** — per-customer due balances, transaction history, WhatsApp/SMS due reminders, due collection, and edit/delete for a customer's name and phone.
 - **Sales log** — every order with its line items, totals and an আজ / ৭ দিন / ৩০ দিন / সব range filter, opened from the dashboard.
 - **Expenses** — preset categories, 7/30-day or all-time filter, search by category or note, filtered count and total.
 - **Daily closing slip** — cash, credit, expenses and net drawer, shareable on WhatsApp or printed as a clean black-on-white receipt (only the slip is sent to the printer).
-- **Products and settings** — editable catalog and prices, shop name, PIN change, day/night theme override.
+- **Products and settings** — editable catalog, prices, per-product icon chosen from a built-in set (falling back to a name-based guess), delete that keeps past sales intact, shop name, PIN change, day/night theme and accent colour.
 - **Backup** — full JSON export/restore plus CSV export and customer CSV import.
 
 ## Local development

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { ACCENT_CHANGE_EVENT, applyAccent, readAccentPreference } from "@/lib/accent";
 
 const DAY_START_HOUR = 6;
 const DAY_END_HOUR = 18;
@@ -66,7 +67,13 @@ export function setThemePreference(preference: ThemePreference) {
  */
 export function ThemeSync() {
   useEffect(() => {
-    const sync = () => applyTheme(resolveDaylight(readThemePreference()));
+    // The accent has no clock component, so it only needs applying once plus a
+    // re-sync when another tab changes it.
+    const syncAccent = () => applyAccent(readAccentPreference());
+    const sync = () => {
+      applyTheme(resolveDaylight(readThemePreference()));
+      syncAccent();
+    };
 
     sync();
     const interval = window.setInterval(sync, 60_000);
@@ -76,6 +83,7 @@ export function ThemeSync() {
     window.addEventListener("focus", sync);
     window.addEventListener("storage", sync);
     window.addEventListener(THEME_CHANGE_EVENT, onPreferenceChange);
+    window.addEventListener(ACCENT_CHANGE_EVENT, onPreferenceChange);
 
     return () => {
       window.clearInterval(interval);
@@ -83,6 +91,7 @@ export function ThemeSync() {
       window.removeEventListener("focus", sync);
       window.removeEventListener("storage", sync);
       window.removeEventListener(THEME_CHANGE_EVENT, onPreferenceChange);
+      window.removeEventListener(ACCENT_CHANGE_EVENT, onPreferenceChange);
     };
   }, []);
 

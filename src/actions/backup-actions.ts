@@ -251,6 +251,7 @@ export async function importFullBackupAction(
         name: String(p.name),
         price: String(p.price),
         isQuickAccess: p.isQuickAccess ? String(p.isQuickAccess) : "true",
+        icon: typeof p.icon === "string" ? p.icon : null,
         createdAt: p.createdAt ? new Date(String(p.createdAt)) : new Date(),
       });
     }

@@ -3,30 +3,16 @@
 import { useCartStore } from "@/store/useCartStore";
 import { Product } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
-import { Coffee, Plus, Flame, Utensils, Droplets, Cigarette, Cookie } from "lucide-react";
+import { Plus, Flame } from "lucide-react";
+import { getProductIconOption, guessProductIconId } from "@/lib/product-icons";
 
 interface QuickItemGridProps {
   products: Product[];
 }
 
-function getItemIcon(name: string) {
-  const lower = name.toLowerCase();
-  if (lower.includes("tea") || lower.includes("চা")) {
-    return <Coffee className="w-5 h-5 text-amber-700 dark:text-amber-400" />;
-  }
-  if (lower.includes("coffee") || lower.includes("কফি")) {
-    return <Flame className="w-5 h-5 text-orange-600 dark:text-orange-400" />;
-  }
-  if (lower.includes("cigarette") || lower.includes("গোল্ডলিফ") || lower.includes("বেনসন") || lower.includes("ডার্বি")) {
-    return <Cigarette className="w-5 h-5 text-red-400" />;
-  }
-  if (lower.includes("toast") || lower.includes("টোস্ট") || lower.includes("বিস্কুট") || lower.includes("কেক")) {
-    return <Cookie className="w-5 h-5 text-yellow-400" />;
-  }
-  if (lower.includes("water") || lower.includes("পানি")) {
-    return <Droplets className="w-5 h-5 text-cyan-700 dark:text-cyan-400" />;
-  }
-  return <Utensils className="w-5 h-5 text-emerald-700 dark:text-emerald-400" />;
+function getItemIcon(product: Product) {
+  const { Icon, tone } = getProductIconOption(product.icon ?? guessProductIconId(product.name));
+  return <Icon className={`w-5 h-5 ${tone}`} />;
 }
 
 export function QuickItemGrid({ products }: QuickItemGridProps) {
@@ -69,7 +55,7 @@ export function QuickItemGrid({ products }: QuickItemGridProps) {
               {/* Top row with icon & cart badge */}
               <div className="flex items-start justify-between w-full">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/10 dark:ring-white/10">
-                  {getItemIcon(product.name)}
+                  {getItemIcon(product)}
                 </div>
 
                 {currentQty > 0 ? (

@@ -33,19 +33,20 @@ async function seed() {
   const userId = defaultUser.id;
 
   // Initial Products (Tong Specials)
+  // Icons match the ids in src/lib/product-icons.ts.
   const defaultProducts = [
-    { id: "prod_cha_rang", name: "রং চা (Black Tea)", price: "8.00", isQuickAccess: "true" },
-    { id: "prod_cha_dudh", name: "দুধ চা (Milk Tea)", price: "12.00", isQuickAccess: "true" },
-    { id: "prod_cha_malai", name: "মালাই চা (Malai Special)", price: "25.00", isQuickAccess: "true" },
-    { id: "prod_coffee", name: "কফি (Coffee)", price: "20.00", isQuickAccess: "true" },
-    { id: "prod_toast", name: "টোস্ট বিস্কুট (Toast)", price: "6.00", isQuickAccess: "true" },
-    { id: "prod_kola", name: "সবরি কলা (Banana)", price: "10.00", isQuickAccess: "true" },
-    { id: "prod_cake", name: "পাউন্ড কেক (Cake)", price: "15.00", isQuickAccess: "true" },
-    { id: "prod_dim_shiddho", name: "ডিম সিদ্ধ (Boiled Egg)", price: "15.00", isQuickAccess: "true" },
-    { id: "prod_goldleaf", name: "গোল্ডলিফ (Gold Leaf)", price: "18.00", isQuickAccess: "true" },
-    { id: "prod_benson", name: "বেনসন (Benson & Hedges)", price: "20.00", isQuickAccess: "true" },
-    { id: "prod_derby", name: "ডার্বি (Derby)", price: "9.00", isQuickAccess: "true" },
-    { id: "prod_water_500", name: "মাম পানি ৫০০ মি.লি.", price: "15.00", isQuickAccess: "true" },
+    { id: "prod_cha_rang", name: "রং চা (Black Tea)", price: "8.00", isQuickAccess: "true", icon: "tea" },
+    { id: "prod_cha_dudh", name: "দুধ চা (Milk Tea)", price: "12.00", isQuickAccess: "true", icon: "tea" },
+    { id: "prod_cha_malai", name: "মালাই চা (Malai Special)", price: "25.00", isQuickAccess: "true", icon: "tea" },
+    { id: "prod_coffee", name: "কফি (Coffee)", price: "20.00", isQuickAccess: "true", icon: "coffee" },
+    { id: "prod_toast", name: "টোস্ট বিস্কুট (Toast)", price: "6.00", isQuickAccess: "true", icon: "biscuit" },
+    { id: "prod_kola", name: "সবরি কলা (Banana)", price: "10.00", isQuickAccess: "true", icon: "banana" },
+    { id: "prod_cake", name: "পাউন্ড কেক (Cake)", price: "15.00", isQuickAccess: "true", icon: "cake" },
+    { id: "prod_dim_shiddho", name: "ডিম সিদ্ধ (Boiled Egg)", price: "15.00", isQuickAccess: "true", icon: "egg" },
+    { id: "prod_goldleaf", name: "গোল্ডলিফ (Gold Leaf)", price: "18.00", isQuickAccess: "true", icon: "cigarette" },
+    { id: "prod_benson", name: "বেনসন (Benson & Hedges)", price: "20.00", isQuickAccess: "true", icon: "cigarette" },
+    { id: "prod_derby", name: "ডার্বি (Derby)", price: "9.00", isQuickAccess: "true", icon: "cigarette" },
+    { id: "prod_water_500", name: "মাম পানি ৫০০ মি.লি.", price: "15.00", isQuickAccess: "true", icon: "water" },
   ];
 
   for (const prod of defaultProducts) {

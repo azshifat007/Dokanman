@@ -13,6 +13,8 @@ export interface Product {
   name: string;
   price: string;
   isQuickAccess: string;
+  /** Icon id from src/lib/product-icons.ts; null means "guess from the name". */
+  icon?: string | null;
   createdAt: Date | string;
 }
 

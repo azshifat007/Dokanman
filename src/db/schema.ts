@@ -27,6 +27,8 @@ export const products = pgTable("products", {
   name: text("name").notNull(),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   isQuickAccess: text("is_quick_access").default("true").notNull(),
+  // Icon id from src/lib/product-icons.ts; null falls back to guessing by name.
+  icon: text("icon"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

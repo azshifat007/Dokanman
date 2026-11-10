@@ -13,6 +13,8 @@ import {
   Sun,
   Moon,
   Clock,
+  Palette,
+  Check,
 } from "lucide-react";
 import { updateShopProfileAction, changePinAction } from "@/actions/auth-actions";
 import { useLanguage } from "@/context/LanguageContext";
@@ -21,6 +23,7 @@ import {
   setThemePreference,
   type ThemePreference,
 } from "@/components/ThemeSync";
+import { ACCENTS, readAccentPreference, setAccentPreference, type AccentId } from "@/lib/accent";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -54,6 +57,10 @@ export function SettingsModal({
   const [themePref, setThemePref] = useState<ThemePreference | null>(null);
   const activeTheme = themePref ?? readThemePreference();
 
+  // Same pattern for the accent colour: null until chosen in this session.
+  const [accentPref, setAccentPref] = useState<AccentId | null>(null);
+  const activeAccent = accentPref ?? readAccentPreference();
+
   if (!isOpen) return null;
 
   const bn = lang === "bn";
@@ -67,6 +74,11 @@ export function SettingsModal({
   const chooseTheme = (value: ThemePreference) => {
     setThemePref(value);
     setThemePreference(value);
+  };
+
+  const chooseAccent = (value: AccentId) => {
+    setAccentPref(value);
+    setAccentPreference(value);
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -153,6 +165,45 @@ export function SettingsModal({
 
             <p className="text-[10px] leading-relaxed text-zinc-600 dark:text-zinc-400">
               {activeTheme === "auto" ? t("themeAutoHint") : t("themeManualHint")}
+            </p>
+          </div>
+
+          {/* Accent colour */}
+          <div className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-3">
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Palette className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+              <span>{t("settingsAccentSection")}</span>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {ACCENTS.map(({ id, labelBn, labelEn, swatch }) => {
+                const active = activeAccent === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => chooseAccent(id)}
+                    aria-pressed={active}
+                    className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-[11px] font-bold transition-colors ${
+                      active
+                        ? "border-amber-500 bg-amber-500/15 text-zinc-900 dark:text-white"
+                        : "border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-amber-500/60"
+                    }`}
+                  >
+                    <span
+                      className="flex h-4 w-4 items-center justify-center rounded-full ring-1 ring-black/20"
+                      style={{ backgroundColor: swatch }}
+                    >
+                      {active && <Check className="w-3 h-3 text-zinc-950" />}
+                    </span>
+                    <span>{bn ? labelBn : labelEn}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <p className="text-[10px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+              {t("settingsAccentHint")}
             </p>
           </div>
 
