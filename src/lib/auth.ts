@@ -1,10 +1,6 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-
-const SESSION_COOKIE_NAME = "dokanman_session";
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "dokanman-secret-super-secure-key-2026-bangladesh"
-);
+import { getAuthSecret, SESSION_COOKIE_NAME } from "./auth-secret";
 
 export interface SessionPayload {
   userId: string;
@@ -17,12 +13,12 @@ export async function signSessionToken(payload: SessionPayload): Promise<string>
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("30d")
-    .sign(JWT_SECRET);
+    .sign(getAuthSecret());
 }
 
 export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET, {
+    const { payload } = await jwtVerify(token, getAuthSecret(), {
       algorithms: ["HS256"],
     });
     return {

@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
-
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "dokanman-secret-super-secure-key-2026-bangladesh"
-);
+import { getAuthSecret, SESSION_COOKIE_NAME } from "@/lib/auth-secret";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -23,12 +20,23 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get("dokanman_session")?.value;
+  let secret: Uint8Array;
+  try {
+    secret = getAuthSecret();
+  } catch (error) {
+    console.error("[auth] deployment is missing a usable AUTH_SECRET:", error);
+    return new NextResponse("Server configuration error: AUTH_SECRET is not set.", {
+      status: 500,
+      headers: { "content-type": "text/plain; charset=utf-8" },
+    });
+  }
+
+  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
   let isAuthenticated = false;
 
   if (token) {
     try {
-      await jwtVerify(token, JWT_SECRET, { algorithms: ["HS256"] });
+      await jwtVerify(token, secret, { algorithms: ["HS256"] });
       isAuthenticated = true;
     } catch {
       isAuthenticated = false;
