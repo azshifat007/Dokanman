@@ -62,12 +62,22 @@ export const transactions = pgTable("transactions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const expenses = pgTable("expenses", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  category: text("category").notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  note: text("note"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   customers: many(customers),
   products: many(products),
   orders: many(orders),
   transactions: many(transactions),
+  expenses: many(expenses),
 }));
 
 export const customersRelations = relations(customers, ({ one, many }) => ({
@@ -122,5 +132,12 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   order: one(orders, {
     fields: [transactions.orderId],
     references: [orders.id],
+  }),
+}));
+
+export const expensesRelations = relations(expenses, ({ one }) => ({
+  user: one(users, {
+    fields: [expenses.userId],
+    references: [users.id],
   }),
 }));

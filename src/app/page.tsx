@@ -1,18 +1,25 @@
 import { Suspense } from "react";
+import { cookies } from "next/headers";
 import { getDashboardInitialData } from "@/actions/pos-actions";
 import { MainApp } from "@/components/MainApp";
-import { Customer, Product } from "@/types";
+import { Customer, Product, Expense } from "@/types";
+import { Language } from "@/i18n/translations";
 import { Coffee } from "lucide-react";
 
 async function DashboardContent() {
   const data = await getDashboardInitialData();
+  const cookieLang = (await cookies()).get("dokanman_lang")?.value;
+  const initialLang: Language = cookieLang === "en" ? "en" : "bn";
 
   return (
     <MainApp
+      initialLang={initialLang}
       shopName={data.shop?.shopName || "মামা টং দোকান ও টি স্টল"}
+      phone={data.shop?.phone}
       initialStats={data.stats}
       initialProducts={data.products as unknown as Product[]}
       initialCustomers={data.customers as unknown as Customer[]}
+      initialExpenses={(data.expenses || []) as unknown as Expense[]}
     />
   );
 }

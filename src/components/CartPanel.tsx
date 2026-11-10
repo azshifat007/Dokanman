@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { createOrderAction } from "@/actions/pos-actions";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   Trash2,
   Plus,
@@ -11,7 +12,6 @@ import {
   AlertTriangle,
   Receipt,
   RotateCcw,
-  Sparkles,
   Loader2,
   Wallet,
   Clock,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 export function CartPanel() {
+  const { lang, t, formatCurrency } = useLanguage();
   const {
     selectedCustomer,
     items,
@@ -71,12 +72,12 @@ export function CartPanel() {
 
   const handleCompleteOrder = async () => {
     if (items.length === 0) {
-      setErrorMessage("কার্ট খালি! পণ্য সিলেক্ট করুন");
+      setErrorMessage(lang === "bn" ? "কার্ট খালি! পণ্য সিলেক্ট করুন" : "Cart is empty!");
       return;
     }
 
     if (due > 0 && !selectedCustomer) {
-      setErrorMessage("বাকি অর্ডারের জন্য অবশ্যই কাস্টমার সিলেক্ট করতে হবে!");
+      setErrorMessage(t("selectCustomerForDueAlert"));
       return;
     }
 
@@ -99,12 +100,14 @@ export function CartPanel() {
 
       if (res.success) {
         setSuccessMessage(
-          `অর্ডার সম্পন্ন হয়েছে! ${due > 0 ? `(বাকি: ৳${due.toFixed(0)})` : "(সম্পূর্ণ পরিশোধ)"}`
+          lang === "bn"
+            ? `অর্ডার সম্পন্ন হয়েছে! ${due > 0 ? `(বাকি: ৳${due.toFixed(0)})` : "(সম্পূর্ণ পরিশোধ)"}`
+            : `Order completed! ${due > 0 ? `(Due: ৳${due.toFixed(0)})` : "(Fully Paid)"}`
         );
         clearCart();
         setTimeout(() => setSuccessMessage(null), 4000);
       } else {
-        setErrorMessage(res.error || "অর্ডার সম্পন্ন করতে ব্যর্থ হয়েছে");
+        setErrorMessage(res.error || (lang === "bn" ? "অর্ডার সম্পন্ন করতে ব্যর্থ হয়েছে" : "Failed to complete order"));
       }
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : "সমস্যা হয়েছে");
@@ -122,9 +125,11 @@ export function CartPanel() {
             <Receipt className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-bold text-white text-sm">সক্রিয় ক্যাশ কার্ট</h3>
+            <h3 className="font-bold text-white text-sm">{t("activeCart")}</h3>
             <span className="text-[11px] text-zinc-400">
-              {items.length > 0 ? `${items.length} টি আইটেম যুক্ত আছে` : "কোনো আইটেম নেই"}
+              {items.length > 0
+                ? `${items.length} ${lang === "bn" ? "টি আইটেম যুক্ত আছে" : "items in cart"}`
+                : lang === "bn" ? "কোনো আইটেম নেই" : "No items added"}
             </span>
           </div>
         </div>
@@ -133,10 +138,10 @@ export function CartPanel() {
           <button
             onClick={clearCart}
             className="flex items-center gap-1 text-xs text-zinc-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
-            title="কার্ট খালি করুন"
+            title={t("clearCart")}
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">খালি করুন</span>
+            <span className="hidden sm:inline">{t("clearCart")}</span>
           </button>
         )}
       </div>
@@ -160,13 +165,13 @@ export function CartPanel() {
       {selectedCustomer && (
         <div className="px-4 py-2.5 bg-zinc-800/40 border-b border-zinc-800 flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5 text-zinc-300">
-            <span className="text-zinc-400">খাতাদার:</span>
+            <span className="text-zinc-400">{lang === "bn" ? "খাতাদার:" : "Customer:"}</span>
             <span className="font-bold text-amber-400">{selectedCustomer.name}</span>
           </div>
           <div className="flex items-center gap-1 text-zinc-300">
-            <span className="text-zinc-400">পূর্বের বাকি:</span>
+            <span className="text-zinc-400">{lang === "bn" ? "পূর্বের বাকি:" : "Prev Due:"}</span>
             <span className="font-bold text-rose-400 font-mono">
-              ৳{prevDue.toFixed(0)}
+              {formatCurrency(prevDue)}
             </span>
           </div>
         </div>
@@ -177,10 +182,8 @@ export function CartPanel() {
         {items.length === 0 ? (
           <div className="py-12 text-center flex flex-col items-center justify-center text-zinc-500">
             <Receipt className="w-10 h-10 mb-2 stroke-[1.5] text-zinc-600" />
-            <p className="text-sm font-semibold text-zinc-400">কার্ট সম্পূর্ণ খালি</p>
-            <p className="text-xs text-zinc-600 max-w-xs mt-1">
-              বাম পাশের মেন্যু থেকে চা, টোস্ট বা সিগারেটের উপর ট্যাপ করুন অথবা কাস্টম আইটেম লিখুন।
-            </p>
+            <p className="text-sm font-semibold text-zinc-400">{t("emptyCartTitle")}</p>
+            <p className="text-xs text-zinc-600 max-w-xs mt-1">{t("emptyCartDesc")}</p>
           </div>
         ) : (
           items.map((item) => (
@@ -193,8 +196,8 @@ export function CartPanel() {
                   {item.productName}
                 </div>
                 <div className="text-zinc-400 font-mono text-[11px]">
-                  ৳{item.unitPrice.toFixed(0)} × {item.quantity} ={" "}
-                  <span className="text-amber-400 font-bold">৳{item.subtotal.toFixed(0)}</span>
+                  {formatCurrency(item.unitPrice)} × {item.quantity} ={" "}
+                  <span className="text-amber-400 font-bold">{formatCurrency(item.subtotal)}</span>
                 </div>
               </div>
 
@@ -235,19 +238,19 @@ export function CartPanel() {
         {/* Quick Custom Item Row */}
         {showCustomItemRow ? (
           <form onSubmit={handleAddCustomItem} className="p-2.5 bg-zinc-950/80 border border-zinc-700 rounded-2xl space-y-2">
-            <div className="text-[11px] font-semibold text-zinc-400">কাস্টম পণ্য যোগ করুন</div>
+            <div className="text-[11px] font-semibold text-zinc-400">{t("customProductBtn")}</div>
             <div className="grid grid-cols-2 gap-2">
               <input
                 type="text"
                 autoFocus
-                placeholder="পণ্যের নাম (যেমন: পান)"
+                placeholder={t("customProductName")}
                 value={customItemName}
                 onChange={(e) => setCustomItemName(e.target.value)}
                 className="px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-xs placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
               />
               <input
                 type="number"
-                placeholder="মূল্য ৳"
+                placeholder={t("customProductPrice")}
                 value={customItemPrice}
                 onChange={(e) => setCustomItemPrice(e.target.value)}
                 className="px-2.5 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white text-xs font-mono placeholder-zinc-500 focus:outline-hidden focus:border-amber-500"
@@ -259,13 +262,13 @@ export function CartPanel() {
                 onClick={() => setShowCustomItemRow(false)}
                 className="px-2.5 py-1 rounded-lg text-[11px] text-zinc-400 hover:bg-zinc-800"
               >
-                বাতিল
+                {t("cancel")}
               </button>
               <button
                 type="submit"
                 className="px-3 py-1 rounded-lg text-[11px] font-bold bg-amber-500 text-zinc-950 hover:bg-amber-400"
               >
-                যোগ করুন
+                {t("addCustomItem")}
               </button>
             </div>
           </form>
@@ -276,7 +279,7 @@ export function CartPanel() {
             className="w-full py-2 border border-dashed border-zinc-800 hover:border-zinc-700 rounded-2xl text-xs text-zinc-400 hover:text-white flex items-center justify-center gap-1.5 transition-colors"
           >
             <Plus className="w-3.5 h-3.5 text-amber-400" />
-            <span>অন্যান্য পণ্য যোগ করুন (+)</span>
+            <span>{t("customProductBtn")}</span>
           </button>
         )}
       </div>
@@ -286,22 +289,22 @@ export function CartPanel() {
         {/* Subtotal, Previous Due & Net Calculation */}
         <div className="space-y-1.5 text-xs">
           <div className="flex justify-between text-zinc-300">
-            <span>বর্তমান অর্ডার মূল্য:</span>
-            <span className="font-bold text-white text-sm font-mono">৳{subtotal.toFixed(0)}</span>
+            <span>{t("orderTotal")}</span>
+            <span className="font-bold text-white text-sm font-mono">{formatCurrency(subtotal)}</span>
           </div>
 
           {selectedCustomer && prevDue > 0 && (
             <div className="flex justify-between text-zinc-400">
-              <span>খাতার পূর্বের বকেয়া:</span>
-              <span className="font-bold text-rose-400 font-mono">+ ৳{prevDue.toFixed(0)}</span>
+              <span>{t("prevDue")}</span>
+              <span className="font-bold text-rose-400 font-mono">+ {formatCurrency(prevDue)}</span>
             </div>
           )}
 
           {selectedCustomer && (
             <div className="flex justify-between text-zinc-300 pt-1 border-t border-zinc-800/80">
-              <span className="font-semibold">মোট বকেয়া দাঁড়াবে:</span>
+              <span className="font-semibold">{t("newGrandBalance")}</span>
               <span className="font-black text-amber-400 text-base font-mono">
-                ৳{grandBalance.toFixed(0)}
+                {formatCurrency(grandBalance)}
               </span>
             </div>
           )}
@@ -310,15 +313,15 @@ export function CartPanel() {
         {/* Payment Toggles: [নগদ] [বাকি] [আংশিক] */}
         <div>
           <div className="text-[11px] font-semibold text-zinc-400 mb-1.5 flex items-center justify-between">
-            <span>পরিশোধের ধরণ:</span>
+            <span>{t("paymentType")}</span>
             {paymentMode === "PAID" && (
-              <span className="text-emerald-400 font-bold">নগদ ক্যাশ গ্রহণ</span>
+              <span className="text-emerald-400 font-bold">{t("payCash")}</span>
             )}
             {paymentMode === "DUE" && (
-              <span className="text-rose-400 font-bold">সম্পূর্ণ বাকি</span>
+              <span className="text-rose-400 font-bold">{t("payDue")}</span>
             )}
             {paymentMode === "PARTIAL" && (
-              <span className="text-amber-400 font-bold">আংশিক জমা</span>
+              <span className="text-amber-400 font-bold">{t("payPartial")}</span>
             )}
           </div>
 
@@ -334,7 +337,7 @@ export function CartPanel() {
               }`}
             >
               <Wallet className="w-4 h-4 mb-0.5" />
-              <span>নগদ পরিশোধ</span>
+              <span>{t("payCash")}</span>
             </button>
 
             {/* Full Due Button */}
@@ -348,7 +351,7 @@ export function CartPanel() {
               }`}
             >
               <Clock className="w-4 h-4 mb-0.5" />
-              <span>সম্পূর্ণ বাকি</span>
+              <span>{t("payDue")}</span>
             </button>
 
             {/* Partial Paid Button */}
@@ -367,7 +370,7 @@ export function CartPanel() {
               }`}
             >
               <Coins className="w-4 h-4 mb-0.5" />
-              <span>আংশিক জমা</span>
+              <span>{t("payPartial")}</span>
             </button>
           </div>
         </div>
@@ -376,9 +379,9 @@ export function CartPanel() {
         {paymentMode === "PARTIAL" && (
           <div className="p-3 bg-zinc-900 border border-amber-500/40 rounded-2xl space-y-2 animate-in fade-in-50">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-zinc-300 font-semibold">ক্যাশ কত জমা দিয়েছে?</span>
+              <span className="text-zinc-300 font-semibold">{t("partialPaidAmount")}</span>
               <span className="text-rose-400 font-mono font-bold">
-                বাকি থাকবে: ৳{due.toFixed(0)}
+                {t("partialDueRemains")} {formatCurrency(due)}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -399,7 +402,7 @@ export function CartPanel() {
                 onClick={() => setCustomPaidAmount(subtotal)}
                 className="px-2.5 py-1.5 rounded-xl bg-zinc-800 text-zinc-300 hover:text-white text-xs font-semibold"
               >
-                পুরোটাই
+                {t("allPaid")}
               </button>
             </div>
           </div>
@@ -423,17 +426,17 @@ export function CartPanel() {
           {isSubmitting ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              <span>অর্ডার সেভ হচ্ছে...</span>
+              <span>{t("savingOrder")}</span>
             </>
           ) : (
             <>
               <CheckCircle2 className="w-5 h-5" />
               <span>
                 {paymentMode === "PAID"
-                  ? `ক্যাশ ৳${subtotal.toFixed(0)} গ্রহণ ও অর্ডার সম্পন্ন`
+                  ? `${t("payCash")} (${formatCurrency(subtotal)})`
                   : paymentMode === "DUE"
-                  ? `৳${due.toFixed(0)} বাকির খাতায় যুক্ত করুন`
-                  : `নগদ ৳${paid.toFixed(0)} জমা ও বাকি ৳${due.toFixed(0)}`}
+                  ? `${t("payDue")} (${formatCurrency(due)})`
+                  : `${formatCurrency(paid)} ${t("payCash")} + ${formatCurrency(due)} ${t("payDue")}`}
               </span>
             </>
           )}

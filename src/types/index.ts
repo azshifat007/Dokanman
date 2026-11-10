@@ -60,9 +60,20 @@ export interface Transaction {
   order?: Order | null;
 }
 
+export interface Expense {
+  id: string;
+  userId: string;
+  category: string;
+  amount: string;
+  note: string | null;
+  createdAt: Date | string;
+}
+
 export interface DashboardStats {
   todayCash: number;
   todayDue: number;
   totalActiveDue: number;
   todayOrdersCount: number;
+  todayExpense: number;
+  todayNetProfit: number;
 }
