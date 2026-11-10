@@ -1,6 +1,6 @@
 # Dokanman (দোকানম্যান)
 
-Mobile-first digital ledger and fast sales counter for small tea stalls and grocery shops in Bangladesh. Bengali/English UI, per-shop tenancy, cash/credit tracking, due collection, expenses, daily closing and backup.
+Mobile-first digital ledger and fast sales counter for small tea stalls and grocery shops in Bangladesh. Bengali/English UI, per-shop tenancy, cash/credit tracking, due collection and reminders, expenses, a sales log, printable daily closing slips and backup.
 
 ## Stack
 
@@ -10,9 +10,21 @@ Mobile-first digital ledger and fast sales counter for small tea stalls and groc
 - `jose` HS256 session cookie (httpOnly, 30 days), `bcryptjs` PIN hashing
 - Zustand for the in-progress cart
 - Vercel Web Analytics (`@vercel/analytics`)
-- Automatic day/night theme: a warm light palette between 06:00 and 18:00 device-local time, the dark palette otherwise
+- Day/night theme: a warm light palette between 06:00 and 18:00 device-local time and the dark palette otherwise, with a per-device Day/Night/Automatic override in Settings
+
+## Features
+
+- **POS counter** — quick item grid, customer search, cash / credit / partial payment, keyboard shortcuts (`/` to search, `Alt+1…4` for tabs).
+- **Bakhi khata (ledger)** — per-customer due balances, transaction history, WhatsApp/SMS due reminders, due collection.
+- **Sales log** — every order with its line items, totals and an আজ / ৭ দিন / ৩০ দিন / সব range filter, opened from the dashboard.
+- **Expenses** — preset categories, 7/30-day or all-time filter, search by category or note, filtered count and total.
+- **Daily closing slip** — cash, credit, expenses and net drawer, shareable on WhatsApp or printed as a clean black-on-white receipt (only the slip is sent to the printer).
+- **Products and settings** — editable catalog and prices, shop name, PIN change, day/night theme override.
+- **Backup** — full JSON export/restore plus CSV export and customer CSV import.
 
 ## Local development
+
+Node 22 is the supported runtime (`engines` in `package.json`); the Vercel project is set to 22.x to match.
 
 ```bash
 npm install
@@ -37,7 +49,7 @@ Demo login after seeding: phone `01700000000`, PIN `1234`.
 ## Deploying to Vercel
 
 1. Push the repository to GitHub/GitLab/Bitbucket (`.env*` files are gitignored, only `.env.example` is committed).
-2. Import the repository at [vercel.com/new](https://vercel.com/new). `vercel.json` already pins the framework, `npm ci`, `npm run build` and the `iad1` function region.
+2. Import the repository at [vercel.com/new](https://vercel.com/new). `vercel.json` already pins the framework, `npm ci`, `npm run build` and the `iad1` function region. Under **Project → Settings → General**, set **Node.js Version** to `22.x` so it matches `package.json`.
 3. Add the environment variables from the table above under **Project → Settings → Environment Variables** for Production (and Preview if you want preview deployments to work).
 4. Run migrations against the production database once, from your machine:
 
@@ -75,7 +87,7 @@ The function region is pinned to `iad1` (us-east-1) because the Neon database ru
 ```
 src/app        routes (login, signup, dashboard shell) and global styles
 src/actions    server actions (auth, POS, ledger, expenses, settings, backup)
-src/components dashboard, POS counter, ledger, expenses, modals, navigation
+src/components dashboard, POS counter, ledger, sales log, expenses, modals, navigation
 src/db         Drizzle schema, client, migrations, seed
 src/lib        session/auth helpers
 src/i18n       Bengali/English strings and currency formatting

@@ -1,6 +1,14 @@
 # AGENT.MD — Technical Specification & Blueprint
 ## Project Name: Dokanman (দোকান Management Web App)
 
+> **Status:** this is the original product blueprint, kept for the intent behind the
+> app. For what is actually built, see `README.md`. Deviations worth knowing:
+> authentication is a 4–6 digit PIN with `bcryptjs` and a `jose` HS256 session
+> cookie (not NextAuth.js); UI is hand-built Tailwind v4 components (no Shadcn UI);
+> there is no service-worker PWA/offline mode yet; the theme follows the device
+> clock with a manual override; and the app also ships a sales log, printable
+> closing slips and expense filtering.
+
 ---
 
 ## 1. Project Overview & Vision
