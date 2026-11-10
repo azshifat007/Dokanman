@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signupAction } from "@/actions/auth-actions";
-import { Coffee, Lock, Phone, Store, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import { Coffee, Lock, Phone, Store, Loader2, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 

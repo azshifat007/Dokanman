@@ -142,7 +142,14 @@ export async function settleCustomerDueAction(payload: SettleCustomerDuePayload)
     }
 
     const currentDue = parseFloat(customer.totalDue || "0");
-    const newDue = Math.max(0, currentDue - amountPaid).toFixed(2);
+
+    if (currentDue <= 0) {
+      return { success: false, error: "এই কাস্টমারের কোনো বাকি নেই!" };
+    }
+
+    // Never record more cash than the outstanding due, otherwise today's cash totals inflate.
+    const appliedAmount = Math.min(amountPaid, currentDue);
+    const newDue = Math.max(0, currentDue - appliedAmount).toFixed(2);
 
     await db
       .update(customers)
@@ -155,7 +162,7 @@ export async function settleCustomerDueAction(payload: SettleCustomerDuePayload)
       userId,
       customerId,
       orderId: null,
-      amount: amountPaid.toFixed(2),
+      amount: appliedAmount.toFixed(2),
       type: "PAYMENT",
       note: note || "বাকি পরিশোধ (Payment Settlement)",
     });
@@ -167,7 +174,7 @@ export async function settleCustomerDueAction(payload: SettleCustomerDuePayload)
       success: true,
       remainingDue: newDue,
       previousDue: currentDue.toFixed(2),
-      amountPaid: amountPaid.toFixed(2),
+      amountPaid: appliedAmount.toFixed(2),
     };
   } catch (err: unknown) {
     console.error("settleCustomerDueAction error:", err);
@@ -250,6 +257,38 @@ export async function createCustomerAction(data: { name: string; phone?: string;
     return {
       success: false,
       error: err instanceof Error ? err.message : "নতুন কাস্টমার তৈরি করতে সমস্যা হয়েছে",
+    };
+  }
+}
+
+export async function getCustomerLedgerAction(customerId: string) {
+  try {
+    const userId = await getActiveUserId();
+
+    const [customer] = await db
+      .select()
+      .from(customers)
+      .where(and(eq(customers.id, customerId), eq(customers.userId, userId)))
+      .limit(1);
+
+    if (!customer) {
+      return { success: false, error: "কাস্টমার পাওয়া যায়নি", transactions: [] };
+    }
+
+    const rows = await db
+      .select()
+      .from(transactions)
+      .where(and(eq(transactions.customerId, customerId), eq(transactions.userId, userId)))
+      .orderBy(desc(transactions.createdAt))
+      .limit(100);
+
+    return { success: true, transactions: rows, customer };
+  } catch (err: unknown) {
+    console.error("getCustomerLedgerAction error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "লেনদেন লোড করতে সমস্যা হয়েছে",
+      transactions: [],
     };
   }
 }

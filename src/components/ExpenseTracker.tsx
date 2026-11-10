@@ -13,7 +13,6 @@ import {
   Coffee,
   Candy,
   Cigarette,
-  Sparkles,
   ShoppingBag,
   Coins
 } from "lucide-react";
@@ -36,6 +35,13 @@ const PRESET_CATEGORIES = [
 export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerProps) {
   const { lang, t, formatCurrency } = useLanguage();
   const [expensesList, setExpensesList] = useState<Expense[]>(initialExpenses);
+  const [prevInitial, setPrevInitial] = useState(initialExpenses);
+
+  // Server refresh brings a new list; adopt it during render (no effect needed).
+  if (prevInitial !== initialExpenses) {
+    setPrevInitial(initialExpenses);
+    setExpensesList(initialExpenses);
+  }
   const [category, setCategory] = useState("দুধ (Milk)");
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
@@ -43,7 +49,10 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const totalExpense = expensesList.reduce((sum, e) => sum + parseFloat(e.amount || "0"), 0);
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todaysExpenses = expensesList.filter((e) => new Date(e.createdAt) >= todayStart);
+  const totalExpense = todaysExpenses.reduce((sum, e) => sum + parseFloat(e.amount || "0"), 0);
 
   const handleAddExpense = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +87,7 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm(t("deleteExpenseConfirm"))) return;
     try {
       setDeletingId(id);
       const res = await deleteExpenseAction(id);
@@ -105,9 +115,7 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
         </div>
 
         <div className="bg-zinc-950 border border-zinc-800 px-4 py-2.5 rounded-2xl flex items-center gap-2.5 self-start sm:self-auto">
-          <span className="text-xs text-zinc-400">
-            {lang === "bn" ? "মোট খরচ:" : "Total Expenses:"}
-          </span>
+          <span className="text-xs text-zinc-400">{t("expensesTodayOnly")}:</span>
           <span className="text-lg font-black font-mono text-rose-400">
             {formatCurrency(totalExpense)}
           </span>
@@ -201,7 +209,7 @@ export function ExpenseTracker({ initialExpenses, onRefresh }: ExpenseTrackerPro
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>সেভ হচ্ছে...</span>
+                  <span>{lang === "bn" ? "সেভ হচ্ছে..." : "Saving..."}</span>
                 </>
               ) : (
                 <>

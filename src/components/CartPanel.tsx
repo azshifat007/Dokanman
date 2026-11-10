@@ -101,8 +101,10 @@ export function CartPanel() {
       if (res.success) {
         setSuccessMessage(
           lang === "bn"
-            ? `অর্ডার সম্পন্ন হয়েছে! ${due > 0 ? `(বাকি: ৳${due.toFixed(0)})` : "(সম্পূর্ণ পরিশোধ)"}`
-            : `Order completed! ${due > 0 ? `(Due: ৳${due.toFixed(0)})` : "(Fully Paid)"}`
+            ? `অর্ডার সম্পন্ন হয়েছে! ${
+                due > 0 ? `(বাকি: ${formatCurrency(due)})` : "(সম্পূর্ণ পরিশোধ)"
+              }`
+            : `Order completed! ${due > 0 ? `(Due: ${formatCurrency(due)})` : "(Fully Paid)"}`
         );
         clearCart();
         setTimeout(() => setSuccessMessage(null), 4000);
@@ -407,6 +409,17 @@ export function CartPanel() {
             </div>
           </div>
         )}
+
+        {/* Order note */}
+        <div>
+          <input
+            type="text"
+            value={orderNote}
+            onChange={(e) => setOrderNote(e.target.value)}
+            placeholder={`${t("orderNoteLabel")} — ${t("orderNotePlaceholder")}`}
+            className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-xs placeholder-zinc-600 focus:outline-hidden focus:border-amber-500"
+          />
+        </div>
 
         {/* Big Complete Order Button */}
         <button

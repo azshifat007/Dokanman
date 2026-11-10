@@ -30,6 +30,7 @@ export const translations = {
     noCustomerFound: "নামে কোনো কাস্টমার পাওয়া যায়নি",
     createNamedCustomer: "নামে নতুন কাস্টমার তৈরি করুন",
     dueBadge: "বাকি",
+    totalDueLabel: "খাতার মোট বাকি:",
 
     // Quick Item Grid
     quickMenuTitle: "টং স্পেশাল মেন্যু (Quick Items)",
@@ -129,6 +130,63 @@ export const translations = {
     quickMenuBadge: "কুইক",
     noProductsYet: "এখনো কোনো পণ্য যোগ করা হয়নি।",
 
+    // Navigation buttons & footer
+    navProducts: "পণ্য",
+    navSlip: "হিসাব স্লিপ",
+    navBackup: "ব্যাকআপ",
+    footerTagline: "লোকাল টং ও মুদি দোকানের দ্রুততম ডিজিটাল বাকির খাতা ও সেলস পিওএস।",
+    historyBtn: "ইতিহাস",
+    customerHistoryTitle: "কাস্টমারের লেনদেন ইতিহাস",
+    noHistoryYet: "এই কাস্টমারের এখনো কোনো লেনদেন নেই।",
+    purchaseType: "বাকি বিক্রি",
+    paymentTypeLabel: "জমা গ্রহণ",
+
+    // Daily closing slip labels
+    slipCashSales: "আজকের ক্যাশ আদায়:",
+    slipCreditSales: "আজকের বাকি বিক্রি:",
+    slipOrders: "মোট সম্পন্ন অর্ডার:",
+    slipExpenses: "আজকের দোকানের খরচ:",
+    slipNetCash: "ক্যাশ বাক্সে থাকা টাকা:",
+    slipTotalDue: "খাতায় মোট দেনা পাওনা:",
+    slipFooter: "দোকানম্যান (Dokanman) — হিসাব সোজা, মন চাঙ্গা",
+    slipHeading: "★ দৈনিক ক্লোজিং হিসাব স্লিপ ★",
+    itemsUnit: "টি",
+
+    // Expenses
+    totalExpensesAll: "মোট খরচ:",
+    expensesTodayOnly: "আজকের খরচ",
+    deleteExpenseConfirm: "এই খরচ এন্ট্রিটি মুছে ফেলতে চান?",
+
+    // Cart extras
+    orderNoteLabel: "অর্ডার নোট (ঐচ্ছিক)",
+    orderNotePlaceholder: "উদা: ২ কাপ চা বাকি, বিকেলে দিবে",
+
+    // Backup modal action labels
+    downloadJsonBtn: "ব্যাকআপ ফাইল ডাউনলোড করুন (.json)",
+    csvExportHeading: "এক্সেল ও স্প্রেডশিট এক্সপোর্ট (CSV)",
+    csvExpenses: "খরচের হিসাব (CSV)",
+    csvExpensesSub: "দৈনিক খরচের রিপোর্ট",
+    customersCsvSub: "নাম ও বকেয়ার তালিকা",
+    transactionsCsvSub: "বাকি ও জমা লেনদেন",
+    ordersCsvSub: "বিক্রির মোট হিসেব",
+    downloading: "ডাউনলোড হচ্ছে...",
+    restoringNow: "রিস্টোর হচ্ছে...",
+    importingNow: "ইমপোর্ট হচ্ছে...",
+
+    // Settings & profile
+    settingsTitle: "দোকান প্রোফাইল ও সেটিংস",
+    settingsProfileSection: "দোকানের তথ্য",
+    settingsPinSection: "পিন কোড পরিবর্তন",
+    settingsShopName: "দোকানের নাম",
+    currentPin: "বর্তমান পিন কোড",
+    newPin: "নতুন পিন কোড (৪-৬ ডিজিট)",
+    saveProfile: "তথ্য সেভ করুন",
+    changePinBtn: "পিন পরিবর্তন করুন",
+    profileSaved: "দোকানের তথ্য সেভ হয়েছে!",
+    pinChanged: "পিন কোড পরিবর্তন হয়েছে!",
+    pinMismatch: "বর্তমান পিন কোড সঠিক নয়",
+    viewCart: "কার্ট দেখুন",
+
     // CSV Import & Restore Modes
     importCustomersCsvTitle: "কাস্টমার তালিকা ইমপোর্ট (CSV)",
     importCustomersCsvDesc: "নাম, মোবাইল নম্বর ও পূর্বের বাকি কলামসহ CSV ফাইল আপলোড করুন।",
@@ -166,6 +224,7 @@ export const translations = {
     noCustomerFound: "No customer found with name",
     createNamedCustomer: "Create new customer named",
     dueBadge: "Due",
+    totalDueLabel: "Total ledger due:",
 
     // Quick Item Grid
     quickMenuTitle: "Tong Quick Menu Items",
@@ -265,6 +324,63 @@ export const translations = {
     quickMenuBadge: "Quick",
     noProductsYet: "No products added yet.",
 
+    // Navigation buttons & footer
+    navProducts: "Products",
+    navSlip: "Day Slip",
+    navBackup: "Backup",
+    footerTagline: "The fastest digital credit ledger & POS for local Tong and grocery shops.",
+    historyBtn: "History",
+    customerHistoryTitle: "Customer Transaction History",
+    noHistoryYet: "No transactions for this customer yet.",
+    purchaseType: "Credit Sale",
+    paymentTypeLabel: "Payment Received",
+
+    // Daily closing slip labels
+    slipCashSales: "Today's Cash Collected:",
+    slipCreditSales: "Today's Credit Sales:",
+    slipOrders: "Completed Orders:",
+    slipExpenses: "Today's Shop Expenses:",
+    slipNetCash: "Cash in Drawer:",
+    slipTotalDue: "Total Ledger Due:",
+    slipFooter: "Dokanman — accounts made simple",
+    slipHeading: "★ DAILY CLOSING SLIP ★",
+    itemsUnit: "pcs",
+
+    // Expenses
+    totalExpensesAll: "Total Expenses:",
+    expensesTodayOnly: "Today's Expenses",
+    deleteExpenseConfirm: "Delete this expense entry?",
+
+    // Cart extras
+    orderNoteLabel: "Order note (optional)",
+    orderNotePlaceholder: "e.g. 2 cups tea on credit, pays in the evening",
+
+    // Backup modal action labels
+    downloadJsonBtn: "Download Backup File (.json)",
+    csvExportHeading: "Excel & Spreadsheet Export (CSV)",
+    csvExpenses: "Expense Report (CSV)",
+    csvExpensesSub: "Daily expense report",
+    customersCsvSub: "Names and due balances",
+    transactionsCsvSub: "Credit & payment ledger",
+    ordersCsvSub: "Sales totals",
+    downloading: "Downloading...",
+    restoringNow: "Restoring...",
+    importingNow: "Importing...",
+
+    // Settings & profile
+    settingsTitle: "Shop Profile & Settings",
+    settingsProfileSection: "Shop Details",
+    settingsPinSection: "Change PIN Code",
+    settingsShopName: "Shop Name",
+    currentPin: "Current PIN Code",
+    newPin: "New PIN Code (4-6 digits)",
+    saveProfile: "Save Details",
+    changePinBtn: "Change PIN",
+    profileSaved: "Shop details saved!",
+    pinChanged: "PIN code changed!",
+    pinMismatch: "Current PIN code is incorrect",
+    viewCart: "View Cart",
+
     // CSV Import & Restore Modes
     importCustomersCsvTitle: "Import Customers (CSV)",
     importCustomersCsvDesc: "Upload a CSV with Name, Phone and Starting Due columns.",
@@ -286,7 +402,7 @@ export function formatCurrency(amount: number | string, lang: Language = "bn"): 
   const num = typeof amount === "string" ? parseFloat(amount) || 0 : amount;
   const formatted = Math.round(num).toLocaleString("en-US");
   if (lang === "bn") {
-    return `৳${toBengaliDigits(formatted)}`;
+    return num < 0 ? `-৳${toBengaliDigits(formatted.replace("-", ""))}` : `৳${toBengaliDigits(formatted)}`;
   }
-  return `৳${formatted}`;
+  return num < 0 ? `-Tk ${formatted.replace("-", "")}` : `Tk ${formatted}`;
 }

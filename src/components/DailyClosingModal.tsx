@@ -2,7 +2,7 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { DashboardStats } from "@/types";
-import { X, Printer, MessageCircle, FileText, CheckCircle2 } from "lucide-react";
+import { X, Printer, MessageCircle, FileText } from "lucide-react";
 
 interface DailyClosingModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export function DailyClosingModal({ isOpen, onClose, shopName, stats }: DailyClo
     day: "numeric",
   });
 
-  const netCashInDrawer = Math.max(0, stats.todayCash - stats.todayExpense);
+  const netCashInDrawer = stats.todayCash - stats.todayExpense;
 
   const handlePrint = () => {
     window.print();
@@ -31,16 +31,16 @@ export function DailyClosingModal({ isOpen, onClose, shopName, stats }: DailyClo
 
   const handleWhatsAppShare = () => {
     const text = encodeURIComponent(
-      `📊 *${shopName} — আজকের হিসাব স্লিপ*\n` +
-      `📅 তারিখ: ${todayStr}\n\n` +
-      `💵 নগদ ক্যাশ আদায়: ৳${stats.todayCash.toFixed(0)}\n` +
-      `🔴 বাকি বিক্রি: ৳${stats.todayDue.toFixed(0)}\n` +
-      `📦 আজকের অর্ডার সংখ্যা: ${stats.todayOrdersCount} টি\n` +
-      `💸 দোকানের খরচ: ৳${stats.todayExpense.toFixed(0)}\n` +
-      `--------------------------------\n` +
-      `💰 *ক্যাশ বাক্সে থাকা টাকা: ৳${netCashInDrawer.toFixed(0)}*\n` +
-      `📈 মোট বকেয়া দেনা: ৳${stats.totalActiveDue.toFixed(0)}\n\n` +
-      `_দোকানম্যান (Dokanman) অ্যাপ থেকে পাঠানো হিসাব_`
+      `📊 *${shopName} — ${t("dailySummarySlip")}*\n` +
+        `📅 ${todayStr}\n\n` +
+        `${t("slipCashSales")} ${formatCurrency(stats.todayCash)}\n` +
+        `${t("slipCreditSales")} ${formatCurrency(stats.todayDue)}\n` +
+        `${t("slipOrders")} ${stats.todayOrdersCount} ${t("itemsUnit")}\n` +
+        `${t("slipExpenses")} ${formatCurrency(stats.todayExpense)}\n` +
+        `--------------------------------\n` +
+        `💰 *${t("slipNetCash")} ${formatCurrency(netCashInDrawer)}*\n` +
+        `${t("slipTotalDue")} ${formatCurrency(stats.totalActiveDue)}\n\n` +
+        `_${t("appName")} (Dokanman)_`
     );
     window.open(`https://wa.me/?text=${text}`, "_blank");
   };
@@ -68,46 +68,50 @@ export function DailyClosingModal({ isOpen, onClose, shopName, stats }: DailyClo
             <h3 className="font-bold text-base text-white tracking-wide">{shopName}</h3>
             <p className="text-[11px] text-zinc-400">{todayStr}</p>
             <p className="text-[10px] text-zinc-500 uppercase tracking-widest">
-              ★ দৈনিক ক্লোজিং হিসাব স্লিপ ★
+              {t("slipHeading")}
             </p>
           </div>
 
           <div className="space-y-2 text-xs">
             <div className="flex justify-between">
-              <span className="text-zinc-400">আজকের ক্যাশ আদায়:</span>
+              <span className="text-zinc-400">{t("slipCashSales")}</span>
               <span className="font-bold text-emerald-400 text-sm">
                 {formatCurrency(stats.todayCash)}
               </span>
             </div>
 
             <div className="flex justify-between">
-              <span className="text-zinc-400">আজকের বাকি বিক্রি:</span>
-              <span className="font-bold text-rose-400">
-                {formatCurrency(stats.todayDue)}
+              <span className="text-zinc-400">{t("slipCreditSales")}</span>
+              <span className="font-bold text-rose-400">{formatCurrency(stats.todayDue)}</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-zinc-400">{t("slipOrders")}</span>
+              <span className="font-bold text-white">
+                {stats.todayOrdersCount} {t("itemsUnit")}
               </span>
             </div>
 
             <div className="flex justify-between">
-              <span className="text-zinc-400">মোট সম্পন্ন অর্ডার:</span>
-              <span className="font-bold text-white">{stats.todayOrdersCount} টি</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-zinc-400">আজকের দোকানের খরচ:</span>
+              <span className="text-zinc-400">{t("slipExpenses")}</span>
               <span className="font-bold text-rose-400">
                 - {formatCurrency(stats.todayExpense)}
               </span>
             </div>
 
             <div className="pt-2 border-t-2 border-dashed border-zinc-600 flex justify-between items-baseline text-sm">
-              <span className="font-bold text-amber-300">ক্যাশ বাক্সে থাকা টাকা:</span>
-              <span className="font-black text-amber-400 text-base">
+              <span className="font-bold text-amber-300">{t("slipNetCash")}</span>
+              <span
+                className={`font-black text-base ${
+                  netCashInDrawer < 0 ? "text-rose-400" : "text-amber-400"
+                }`}
+              >
                 {formatCurrency(netCashInDrawer)}
               </span>
             </div>
 
             <div className="flex justify-between pt-1 text-[11px] text-zinc-500">
-              <span>খাতায় মোট দেনা পাওনা:</span>
+              <span>{t("slipTotalDue")}</span>
               <span className="font-bold text-zinc-400 font-mono">
                 {formatCurrency(stats.totalActiveDue)}
               </span>
@@ -115,7 +119,7 @@ export function DailyClosingModal({ isOpen, onClose, shopName, stats }: DailyClo
           </div>
 
           <div className="text-center text-[10px] text-zinc-500 pt-3 border-t border-dashed border-zinc-700">
-            দোকানম্যান (Dokanman) — হিসাব সোজা, মন চাঙ্গা
+            {t("slipFooter")}
           </div>
         </div>
 

@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { users, products } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
-import { setSessionCookie, clearSessionCookie, getSession } from "@/lib/auth";
+import { setSessionCookie, clearSessionCookie, getSession, requireAuthUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export interface SignupInput {
@@ -150,4 +150,77 @@ export async function logoutAction() {
 
 export async function getCurrentUserAction() {
   return await getSession();
+}
+
+export async function updateShopProfileAction(input: { shopName: string }) {
+  try {
+    const session = await requireAuthUser();
+    const shopName = input.shopName?.trim();
+
+    if (!shopName) {
+      return { success: false, error: "দোকানের নাম লিখুন (Please enter shop name)" };
+    }
+
+    const [updated] = await db
+      .update(users)
+      .set({ shopName })
+      .where(eq(users.id, session.userId))
+      .returning();
+
+    if (!updated) {
+      return { success: false, error: "দোকানের তথ্য পাওয়া যায়নি" };
+    }
+
+    // Refresh the session so the header shows the new shop name immediately.
+    await setSessionCookie({
+      userId: updated.id,
+      phone: updated.phone,
+      shopName: updated.shopName,
+    });
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("updateShopProfileAction error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "তথ্য সেভ করতে ব্যর্থ হয়েছে",
+    };
+  }
+}
+
+export async function changePinAction(input: { currentPin: string; newPin: string }) {
+  try {
+    const session = await requireAuthUser();
+    const currentPin = input.currentPin?.trim();
+    const newPin = input.newPin?.trim();
+
+    if (!currentPin || !newPin) {
+      return { success: false, error: "বর্তমান ও নতুন পিন কোড দিন" };
+    }
+    if (!/^\d{4,6}$/.test(newPin)) {
+      return { success: false, error: "নতুন পিন ৪ থেকে ৬ ডিজিটের সংখ্যা হতে হবে" };
+    }
+
+    const [user] = await db.select().from(users).where(eq(users.id, session.userId)).limit(1);
+    if (!user) {
+      return { success: false, error: "অ্যাকাউন্ট পাওয়া যায়নি" };
+    }
+
+    const isValid = await bcrypt.compare(currentPin, user.pinHash);
+    if (!isValid) {
+      return { success: false, error: "বর্তমান পিন কোড সঠিক নয়" };
+    }
+
+    const pinHash = await bcrypt.hash(newPin, 10);
+    await db.update(users).set({ pinHash }).where(eq(users.id, session.userId));
+
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("changePinAction error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "পিন পরিবর্তন করতে ব্যর্থ হয়েছে",
+    };
+  }
 }

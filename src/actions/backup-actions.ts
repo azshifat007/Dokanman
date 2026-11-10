@@ -208,6 +208,15 @@ export async function importFullBackupAction(
     );
     const skippedPhones = new Set<string>();
 
+    // Merge mode also skips products that already exist under the same name.
+    const existingProducts = await db
+      .select({ name: products.name })
+      .from(products)
+      .where(eq(products.userId, user.userId));
+    const existingProductNames = new Set(
+      existingProducts.map((p) => p.name.trim().toLowerCase())
+    );
+
     for (const c of bCustomers as Array<Record<string, unknown>>) {
       if (!c?.id || !c.name) continue;
       const phone = c.phone ? String(c.phone).trim() : null;
@@ -230,6 +239,12 @@ export async function importFullBackupAction(
 
     for (const p of bProducts as Array<Record<string, unknown>>) {
       if (!p?.id || !p.name || p.price === undefined) continue;
+      const normalizedName = String(p.name).trim().toLowerCase();
+      if (mode === "merge" && existingProductNames.has(normalizedName)) {
+        productIdMap.delete(String(p.id));
+        continue;
+      }
+      existingProductNames.add(normalizedName);
       await db.insert(products).values({
         id: productIdMap.get(String(p.id))!,
         userId: user.userId,
@@ -242,6 +257,12 @@ export async function importFullBackupAction(
 
     for (const o of bOrders as Array<Record<string, unknown>>) {
       if (!o?.id || o.totalAmount === undefined) continue;
+      // In merge mode a credit order belongs to a customer that was just skipped as a
+      // duplicate; importing it would create an orphan walk-in sale.
+      if (mode === "merge" && o.customerId && !customerIdMap.has(String(o.customerId))) {
+        orderIdMap.delete(String(o.id));
+        continue;
+      }
       const rawStatus = String(o.status || "PAID");
       const status: "PAID" | "DUE" | "PARTIAL" =
         rawStatus === "DUE" || rawStatus === "PARTIAL" ? rawStatus : "PAID";

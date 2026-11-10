@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { expenses } from "@/db/schema";
-import { eq, desc, and, gte } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { requireAuthUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 

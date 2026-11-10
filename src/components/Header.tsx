@@ -15,7 +15,8 @@ import {
   LogOut,
   Languages,
   TrendingUp,
-  Package
+  Package,
+  Settings
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -28,6 +29,7 @@ interface HeaderProps {
   onOpenDailySlip: () => void;
   onOpenBackup: () => void;
   onOpenProducts: () => void;
+  onOpenSettings: () => void;
 }
 
 export function Header({
@@ -39,6 +41,7 @@ export function Header({
   onOpenDailySlip,
   onOpenBackup,
   onOpenProducts,
+  onOpenSettings,
 }: HeaderProps) {
   const { lang, toggleLang, t, formatCurrency } = useLanguage();
   const router = useRouter();
@@ -82,6 +85,8 @@ export function Header({
           <div className="flex items-center gap-1 bg-zinc-800/90 p-1 rounded-xl border border-zinc-700">
             <button
               onClick={() => onTabChange("pos")}
+              aria-label={t("tabPos")}
+              aria-pressed={currentTab === "pos"}
               className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentTab === "pos"
                   ? "bg-amber-500 text-zinc-950 shadow-sm"
@@ -89,10 +94,12 @@ export function Header({
               }`}
             >
               <ShoppingBag className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline">{t("tabPos")}</span>
+              <span className="hidden sm:inline">{t("tabPos")}</span>
             </button>
             <button
               onClick={() => onTabChange("ledger")}
+              aria-label={t("tabLedger")}
+              aria-pressed={currentTab === "ledger"}
               className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentTab === "ledger"
                   ? "bg-amber-500 text-zinc-950 shadow-sm"
@@ -100,10 +107,12 @@ export function Header({
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline">{t("tabLedger")}</span>
+              <span className="hidden sm:inline">{t("tabLedger")}</span>
             </button>
             <button
               onClick={() => onTabChange("expenses")}
+              aria-label={t("tabExpenses")}
+              aria-pressed={currentTab === "expenses"}
               className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentTab === "expenses"
                   ? "bg-amber-500 text-zinc-950 shadow-sm"
@@ -111,7 +120,7 @@ export function Header({
               }`}
             >
               <Receipt className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline">{t("tabExpenses")}</span>
+              <span className="hidden sm:inline">{t("tabExpenses")}</span>
             </button>
           </div>
 
@@ -119,47 +128,56 @@ export function Header({
           <button
             onClick={onOpenProducts}
             className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-cyan-400 border border-zinc-700 text-xs font-semibold flex items-center gap-1 transition-colors"
-            title="পণ্য তালিকা ও দাম"
+            title={t("productCatalogTitle")}
           >
             <Package className="w-4 h-4" />
-            <span className="hidden md:inline">পণ্য</span>
+            <span className="hidden md:inline">{t("navProducts")}</span>
           </button>
 
           {/* Daily Closing Slip Button */}
           <button
             onClick={onOpenDailySlip}
             className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-amber-400 border border-zinc-700 text-xs font-semibold flex items-center gap-1 transition-colors"
-            title="আজকের হিসাব স্লিপ"
+            title={t("dailySummarySlip")}
           >
             <FileText className="w-4 h-4" />
-            <span className="hidden md:inline">হিসাব স্লিপ</span>
+            <span className="hidden md:inline">{t("navSlip")}</span>
           </button>
 
           {/* Backup / Export Button */}
           <button
             onClick={onOpenBackup}
             className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-emerald-400 border border-zinc-700 text-xs font-semibold flex items-center gap-1 transition-colors"
-            title="ব্যাকআপ ও এক্সপোর্ট"
+            title={t("backupTitle")}
           >
             <FileSpreadsheet className="w-4 h-4" />
-            <span className="hidden md:inline">ব্যাকআপ</span>
+            <span className="hidden md:inline">{t("navBackup")}</span>
           </button>
 
           {/* Language Toggle */}
           <button
             onClick={toggleLang}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white border border-zinc-700 text-xs font-bold transition-colors"
-            title="ভাষা পরিবর্তন করুন"
+            title={lang === "bn" ? "Switch to English" : "বাংলায় দেখুন"}
           >
             <Languages className="w-3.5 h-3.5 text-amber-400" />
             <span>{lang === "bn" ? "EN" : "বাংলা"}</span>
+          </button>
+
+          {/* Shop Settings */}
+          <button
+            onClick={onOpenSettings}
+            className="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white border border-zinc-700 text-xs transition-colors"
+            title={t("settingsTitle")}
+          >
+            <Settings className="w-4 h-4" />
           </button>
 
           {/* Logout */}
           <button
             onClick={handleLogout}
             className="p-2 rounded-xl bg-zinc-800 hover:bg-rose-950/60 hover:text-rose-400 text-zinc-400 border border-zinc-700 text-xs transition-colors"
-            title="লগআউট"
+            title={t("logout")}
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -218,8 +236,12 @@ export function Header({
             <TrendingUp className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
             <div className="truncate">
               <span className="text-zinc-400 block text-[10px]">{t("cashInDrawer")}:</span>
-              <span className="font-black text-cyan-400 text-xs sm:text-sm font-mono">
-                {formatCurrency(Math.max(0, stats.todayCash - stats.todayExpense))}
+              <span
+                className={`font-black text-xs sm:text-sm font-mono ${
+                  stats.todayCash - stats.todayExpense < 0 ? "text-rose-400" : "text-cyan-400"
+                }`}
+              >
+                {formatCurrency(stats.todayCash - stats.todayExpense)}
               </span>
             </div>
           </div>

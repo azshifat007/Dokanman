@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { translations, Language, formatCurrency as formatCurrHelper } from "@/i18n/translations";
 
 interface LanguageContextType {
@@ -23,6 +23,11 @@ export function LanguageProvider({
   // The server reads the dokanman_lang cookie and passes it down, so the first paint
   // already matches the saved preference without a client-side effect.
   const [lang, setLangState] = useState<Language>(initialLang);
+
+  // Keep the document language attribute in sync for screen readers (DOM side effect only).
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const setLang = (newLang: Language) => {
     setLangState(newLang);

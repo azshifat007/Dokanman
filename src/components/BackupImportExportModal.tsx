@@ -18,7 +18,6 @@ import {
   Loader2,
   CheckCircle2,
   AlertTriangle,
-  RefreshCw
 } from "lucide-react";
 
 interface BackupImportExportModalProps {
@@ -243,12 +242,12 @@ export function BackupImportExportModal({
               {downloading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>ডাউনলোড হচ্ছে...</span>
+                  <span>{t("downloading")}</span>
                 </>
               ) : (
                 <>
                   <Download className="w-4 h-4" />
-                  <span>ব্যাকআপ ফাইল ডাউনলোড করুন (.json)</span>
+                  <span>{t("downloadJsonBtn")}</span>
                 </>
               )}
             </button>
@@ -258,7 +257,7 @@ export function BackupImportExportModal({
           <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
             <div className="flex items-center gap-2 text-white font-bold text-sm">
               <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
-              <span>এক্সেল ও স্প্রেডশিট এক্সপোর্ট (CSV)</span>
+              <span>{t("csvExportHeading")}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -268,7 +267,7 @@ export function BackupImportExportModal({
                 className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
               >
                 <div className="font-semibold text-white">{t("exportCustomersCsv")}</div>
-                <div className="text-[10px] text-zinc-400">নাম ও বকেয়ার তালিকা</div>
+                <div className="text-[10px] text-zinc-400">{t("customersCsvSub")}</div>
               </button>
 
               <button
@@ -278,7 +277,7 @@ export function BackupImportExportModal({
                 className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
               >
                 <div className="font-semibold text-white">{t("exportTransactionsCsv")}</div>
-                <div className="text-[10px] text-zinc-400">বাকি ও জমা লেনদেন</div>
+                <div className="text-[10px] text-zinc-400">{t("transactionsCsvSub")}</div>
               </button>
 
               <button
@@ -288,7 +287,7 @@ export function BackupImportExportModal({
                 className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
               >
                 <div className="font-semibold text-white">{t("exportOrdersCsv")}</div>
-                <div className="text-[10px] text-zinc-400">বিক্রির মোট হিসেব</div>
+                <div className="text-[10px] text-zinc-400">{t("ordersCsvSub")}</div>
               </button>
 
               <button
@@ -297,8 +296,8 @@ export function BackupImportExportModal({
                 disabled={downloading}
                 className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700/80 border border-zinc-700 text-left text-xs text-zinc-200 transition-colors"
               >
-                <div className="font-semibold text-white">খরচের হিসাব (CSV)</div>
-                <div className="text-[10px] text-zinc-400">দৈনিক খরচের রিপোর্ট</div>
+                <div className="font-semibold text-white">{t("csvExpenses")}</div>
+                <div className="text-[10px] text-zinc-400">{t("csvExpensesSub")}</div>
               </button>
             </div>
           </div>
@@ -352,7 +351,7 @@ export function BackupImportExportModal({
               {restoring ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
-                  <span>রিস্টোর হচ্ছে...</span>
+                  <span>{t("restoringNow")}</span>
                 </>
               ) : (
                 <>
@@ -382,7 +381,7 @@ export function BackupImportExportModal({
               {importingCsv ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
-                  <span>ইমপোর্ট হচ্ছে...</span>
+                  <span>{t("importingNow")}</span>
                 </>
               ) : (
                 <>

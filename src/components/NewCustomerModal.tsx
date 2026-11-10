@@ -4,6 +4,7 @@ import { useState } from "react";
 import { UserPlus, X, Loader2 } from "lucide-react";
 import { createCustomerAction } from "@/actions/pos-actions";
 import { Customer } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface NewCustomerModalProps {
   isOpen: boolean;
@@ -12,19 +13,37 @@ interface NewCustomerModalProps {
   initialQuery?: string;
 }
 
-export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQuery = "" }: NewCustomerModalProps) {
+export function NewCustomerModal({
+  isOpen,
+  onClose,
+  onCustomerCreated,
+  initialQuery = "",
+}: NewCustomerModalProps) {
+  const { lang, t } = useLanguage();
   const [name, setName] = useState(initialQuery);
   const [phone, setPhone] = useState("");
   const [initialDue, setInitialDue] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [wasOpen, setWasOpen] = useState(isOpen);
+
+  // Reset the form each time the modal transitions from closed to open.
+  if (isOpen !== wasOpen) {
+    setWasOpen(isOpen);
+    if (isOpen) {
+      setName(initialQuery);
+      setPhone("");
+      setInitialDue("");
+      setError(null);
+    }
+  }
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError("কাস্টমারের নাম লিখুন");
+      setError(lang === "bn" ? "কাস্টমারের নাম লিখুন" : "Please enter the customer name");
       return;
     }
 
@@ -41,10 +60,12 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
         onCustomerCreated(res.customer as unknown as Customer);
         onClose();
       } else {
-        setError(res.error || "কাস্টমার তৈরিতে ত্রুটি হয়েছে");
+        setError(
+          res.error || (lang === "bn" ? "কাস্টমার তৈরিতে ত্রুটি হয়েছে" : "Failed to create customer")
+        );
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "সমস্যা হয়েছে");
+      setError(err instanceof Error ? err.message : "Error");
     } finally {
       setLoading(false);
     }
@@ -57,7 +78,7 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
         <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4 bg-zinc-950/50">
           <div className="flex items-center gap-2 text-amber-400 font-bold">
             <UserPlus className="w-5 h-5" />
-            <span>নতুন কাস্টমার যোগ করুন</span>
+            <span>{t("newCustomerTitle")}</span>
           </div>
           <button
             onClick={onClose}
@@ -77,13 +98,15 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
 
           <div>
             <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-              কাস্টমারের নাম <span className="text-rose-400">*</span>
+              {t("customerName")} <span className="text-rose-400">*</span>
             </label>
             <input
               type="text"
               required
               autoFocus
-              placeholder="উদা: শাকিল মেকানিক / করিম ভাই"
+              placeholder={
+                lang === "bn" ? "উদা: শাকিল মেকানিক / করিম ভাই" : "e.g. Shakil the mechanic"
+              }
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-500 focus:outline-hidden focus:border-amber-500 text-sm"
@@ -92,7 +115,7 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
 
           <div>
             <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-              মোবাইল নম্বর (ঐচ্ছিক)
+              {t("customerPhone")}
             </label>
             <input
               type="tel"
@@ -105,7 +128,7 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
 
           <div>
             <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-              পূর্বে কোনো বাকি থাকলে (টাকা ৳)
+              {t("customerOpeningDue")}
             </label>
             <input
               type="number"
@@ -117,7 +140,9 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
               className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-500 focus:outline-hidden focus:border-amber-500 text-sm font-mono"
             />
             <p className="text-[11px] text-zinc-500 mt-1">
-              খাতার আগের কোনো বকেয়া থাকলে এখানে লিখে দিতে পারেন।
+              {lang === "bn"
+                ? "খাতার আগের কোনো বকেয়া থাকলে এখানে লিখে দিতে পারেন।"
+                : "Add any pre-existing due balance for this customer."}
             </p>
           </div>
 
@@ -128,7 +153,7 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
               disabled={loading}
               className="px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-zinc-800"
             >
-              বাতিল
+              {t("cancel")}
             </button>
             <button
               type="submit"
@@ -136,7 +161,7 @@ export function NewCustomerModal({ isOpen, onClose, onCustomerCreated, initialQu
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-amber-500 text-zinc-950 hover:bg-amber-400 disabled:opacity-50"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              <span>সেভ ও কার্টে যুক্ত করুন</span>
+              <span>{t("saveAndSelectCustomer")}</span>
             </button>
           </div>
         </form>
