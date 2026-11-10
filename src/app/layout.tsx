@@ -21,11 +21,12 @@ export const viewport: Viewport = {
 };
 
 /**
- * Runs before first paint so the palette matches the device clock immediately.
- * 06:00–18:00 local time is day mode, everything else is night mode. ThemeSync
- * keeps it current while the app stays open.
+ * Runs before first paint so the palette is right immediately: a saved manual
+ * choice (day/night) wins, otherwise 06:00–18:00 local time is day mode and
+ * everything else is night mode. ThemeSync keeps it current while the app stays
+ * open. Keep this key in sync with THEME_STORAGE_KEY in ThemeSync.tsx.
  */
-const themeBootstrapScript = `(function(){try{var h=new Date().getHours();var day=h>=6&&h<18;var c=document.documentElement.classList;c.toggle("day",day);c.toggle("dark",!day);document.documentElement.style.colorScheme=day?"light":"dark";var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute("content",day?"#f7f5ef":"#09090b");}}catch(e){document.documentElement.classList.add("dark");}})();`;
+const themeBootstrapScript = `(function(){try{var p=null;try{p=window.localStorage.getItem("dokanman-theme");}catch(e){}var h=new Date().getHours();var day=p==="day"||(p!=="night"&&h>=6&&h<18);var c=document.documentElement.classList;c.toggle("day",day);c.toggle("dark",!day);document.documentElement.style.colorScheme=day?"light":"dark";var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute("content",day?"#f7f5ef":"#09090b");}}catch(e){document.documentElement.classList.add("dark");}})();`;
 
 export default function RootLayout({
   children,

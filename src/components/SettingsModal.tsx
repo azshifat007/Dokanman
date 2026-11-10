@@ -1,9 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { X, Settings, Store, Lock, Loader2, CheckCircle2, AlertTriangle, Phone } from "lucide-react";
+import {
+  X,
+  Settings,
+  Store,
+  Lock,
+  Loader2,
+  CheckCircle2,
+  AlertTriangle,
+  Phone,
+  Sun,
+  Moon,
+  Clock,
+} from "lucide-react";
 import { updateShopProfileAction, changePinAction } from "@/actions/auth-actions";
 import { useLanguage } from "@/context/LanguageContext";
+import {
+  readThemePreference,
+  setThemePreference,
+  type ThemePreference,
+} from "@/components/ThemeSync";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -32,9 +49,25 @@ export function SettingsModal({
   const [savingPin, setSavingPin] = useState(false);
   const [pinMsg, setPinMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
+  // null means "not chosen in this session yet", so the saved preference is read
+  // on render. This modal only opens after a click, so there is no SSR mismatch.
+  const [themePref, setThemePref] = useState<ThemePreference | null>(null);
+  const activeTheme = themePref ?? readThemePreference();
+
   if (!isOpen) return null;
 
   const bn = lang === "bn";
+
+  const themeOptions: { value: ThemePreference; label: string; Icon: typeof Sun }[] = [
+    { value: "auto", label: t("themeAuto"), Icon: Clock },
+    { value: "day", label: t("themeDay"), Icon: Sun },
+    { value: "night", label: t("themeNight"), Icon: Moon },
+  ];
+
+  const chooseTheme = (value: ThemePreference) => {
+    setThemePref(value);
+    setThemePreference(value);
+  };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,6 +122,40 @@ export function SettingsModal({
         </div>
 
         <div className="p-5 space-y-5 overflow-y-auto max-h-[65vh]">
+          {/* Day / night mode */}
+          <div className="p-4 rounded-2xl bg-white/70 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 space-y-3">
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-bold text-sm">
+              <Sun className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+              <span>{t("settingsThemeSection")}</span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              {themeOptions.map(({ value, label, Icon }) => {
+                const active = activeTheme === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => chooseTheme(value)}
+                    aria-pressed={active}
+                    className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-2.5 text-[11px] font-bold transition-colors ${
+                      active
+                        ? "bg-amber-500 border-amber-500 text-zinc-950"
+                        : "bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-amber-500/60"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <p className="text-[10px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+              {activeTheme === "auto" ? t("themeAutoHint") : t("themeManualHint")}
+            </p>
+          </div>
+
           {/* Shop profile */}
           <form
             onSubmit={handleSaveProfile}
