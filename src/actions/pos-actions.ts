@@ -487,6 +487,15 @@ export async function addProductAction(data: {
   try {
     const userId = await getActiveUserId();
     const id = `prod_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+    // New products go to the end of the menu the vendor has arranged.
+    const [lastInOrder] = await db
+      .select({ sortOrder: products.sortOrder })
+      .from(products)
+      .where(eq(products.userId, userId))
+      .orderBy(desc(products.sortOrder))
+      .limit(1);
+
     const [prod] = await db
       .insert(products)
       .values({
@@ -496,6 +505,7 @@ export async function addProductAction(data: {
         price: data.price.toFixed(2),
         isQuickAccess: data.isQuickAccess !== false ? "true" : "false",
         icon: data.icon || null,
+        sortOrder: (lastInOrder?.sortOrder ?? -1) + 1,
       })
       .returning();
 
@@ -520,6 +530,45 @@ export async function toggleProductQuickAccessAction(productId: string, isQuickA
   } catch (err: unknown) {
     console.error("toggleProductQuickAccessAction error:", err);
     return { success: false, error: "পণ্যের কুইক অ্যাক্সেস পরিবর্তন করতে সমস্যা হয়েছে" };
+  }
+}
+
+/**
+ * Saves the menu order as the position of each product id in `orderedIds`.
+ * Only products owned by the signed-in vendor are touched; ids that are not
+ * theirs are ignored so one shop can never reorder another shop's menu.
+ */
+export async function reorderProductsAction(orderedIds: string[]) {
+  try {
+    if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
+      return { success: false, error: "পণ্যের ক্রম পাওয়া যায়নি" };
+    }
+
+    const userId = await getActiveUserId();
+    const owned = await db
+      .select({ id: products.id })
+      .from(products)
+      .where(eq(products.userId, userId));
+    const ownedIds = new Set(owned.map((p) => p.id));
+
+    // The neon-http driver has no transactions, so the writes are issued together and
+    // a reorder is retried by the client if any of them fails.
+    await Promise.all(
+      orderedIds
+        .filter((id) => ownedIds.has(id))
+        .map((id, index) =>
+          db
+            .update(products)
+            .set({ sortOrder: index })
+            .where(and(eq(products.id, id), eq(products.userId, userId)))
+        )
+    );
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("reorderProductsAction error:", err);
+    return { success: false, error: "মেন্যুর ক্রম সেভ করা যায়নি" };
   }
 }
 
@@ -587,7 +636,11 @@ export async function getDashboardInitialData() {
     topProductRows,
     expenseList,
   ] = await Promise.all([
-      db.select().from(products).where(eq(products.userId, userId)).orderBy(products.name),
+      db
+        .select()
+        .from(products)
+        .where(eq(products.userId, userId))
+        .orderBy(products.sortOrder, products.name),
       db.select().from(customers).where(eq(customers.userId, userId)).orderBy(desc(customers.totalDue)),
       db
         .select({

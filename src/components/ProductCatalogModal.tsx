@@ -9,6 +9,7 @@ import {
   updateProductIconAction,
   toggleProductQuickAccessAction,
   deleteProductAction,
+  reorderProductsAction,
 } from "@/actions/pos-actions";
 import { PRODUCT_ICONS, getProductIconOption, guessProductIconId } from "@/lib/product-icons";
 import {
@@ -24,6 +25,8 @@ import {
   Star,
   StarOff,
   Shapes,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 
 interface ProductCatalogModalProps {
@@ -117,9 +120,9 @@ export function ProductCatalogModal({
         icon: newIcon,
       });
       if (res.success && res.product) {
-        setList((prev) =>
-          [...prev, res.product as unknown as Product].sort((a, b) => a.name.localeCompare(b.name))
-        );
+        // The server gives new products the last menu position, so they are appended
+        // rather than dropped into the middle of the vendor's arrangement.
+        setList((prev) => [...prev, res.product as unknown as Product]);
         setNewName("");
         setNewPrice("");
         setNewIcon(null);
@@ -223,6 +226,39 @@ export function ProductCatalogModal({
       } else {
         setMessage({ type: "error", text: res.error || "Error" });
       }
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const handleMove = async (index: number, direction: -1 | 1) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= list.length) return;
+
+    const previous = list;
+    const next = [...list];
+    [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+
+    // Move immediately so the tap feels instant, then persist the whole order.
+    setList(next);
+    setBusyId(next[targetIndex].id);
+    setMessage(null);
+
+    try {
+      const res = await reorderProductsAction(next.map((p) => p.id));
+      if (res.success) {
+        setMessage({
+          type: "success",
+          text: bn ? "মেন্যুর নতুন ক্রম সেভ হয়েছে" : "Menu order saved",
+        });
+        onRefresh();
+      } else {
+        setList(previous);
+        setMessage({ type: "error", text: res.error || "Error" });
+      }
+    } catch (err: unknown) {
+      setList(previous);
+      setMessage({ type: "error", text: err instanceof Error ? err.message : "Error" });
     } finally {
       setBusyId(null);
     }
@@ -342,12 +378,15 @@ export function ProductCatalogModal({
             </button>
           </form>
 
-          {/* Product list */}
+          {/* Product list, in menu order */}
+          <div className="space-y-1.5">
+            <p className="text-[10px] text-zinc-500">{t("reorderHint")}</p>
+          </div>
           <div className="divide-y divide-zinc-200 dark:divide-zinc-800/80">
             {list.length === 0 ? (
               <div className="py-10 text-center text-zinc-500 text-xs">{t("noProductsYet")}</div>
             ) : (
-              list.map((product) => {
+              list.map((product, index) => {
                 const isQuick = product.isQuickAccess === "true";
                 const isEditing = editingId === product.id;
                 const isBusy = busyId === product.id;
@@ -422,6 +461,28 @@ export function ProductCatalogModal({
                       </div>
 
                       <div className="flex items-center gap-1">
+                        <div className="flex flex-col">
+                          <button
+                            type="button"
+                            onClick={() => handleMove(index, -1)}
+                            disabled={index === 0 || isBusy}
+                            className="rounded-md p-0.5 text-zinc-500 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                            title={t("moveUp")}
+                            aria-label={t("moveUp")}
+                          >
+                            <ChevronUp className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleMove(index, 1)}
+                            disabled={index === list.length - 1 || isBusy}
+                            className="rounded-md p-0.5 text-zinc-500 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                            title={t("moveDown")}
+                            aria-label={t("moveDown")}
+                          >
+                            <ChevronDown className="w-4 h-4" />
+                          </button>
+                        </div>
                         {!isEditing && (
                           <button
                             type="button"

@@ -170,6 +170,9 @@ export const translations = {
     productIconChosen: "নির্বাচিত",
     changeProductIcon: "আইকন পরিবর্তন করুন",
     chooseProductIcon: "নতুন আইকন বেছে নিন",
+    moveUp: "উপরে সরান",
+    moveDown: "নিচে সরান",
+    reorderHint: "তীর চিহ্ন দিয়ে মেন্যুর ক্রম বদলান — এই ক্রমই POS কুইক মেন্যুতে দেখা যাবে।",
 
     // Customers
     editCustomer: "কাস্টমারের তথ্য সম্পাদনা করুন",
@@ -420,6 +423,9 @@ export const translations = {
     productIconChosen: "Selected",
     changeProductIcon: "Change icon",
     chooseProductIcon: "Choose a new icon",
+    moveUp: "Move up",
+    moveDown: "Move down",
+    reorderHint: "Use the arrows to rearrange the menu — this is the order the POS quick menu shows.",
 
     // Customers
     editCustomer: "Edit customer details",

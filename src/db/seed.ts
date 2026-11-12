@@ -49,12 +49,13 @@ async function seed() {
     { id: "prod_water_500", name: "মাম পানি ৫০০ মি.লি.", price: "15.00", isQuickAccess: "true", icon: "water" },
   ];
 
-  for (const prod of defaultProducts) {
+  for (const [index, prod] of defaultProducts.entries()) {
     await db
       .insert(products)
       .values({
         ...prod,
         userId,
+        sortOrder: index,
       })
       .onConflictDoNothing();
   }

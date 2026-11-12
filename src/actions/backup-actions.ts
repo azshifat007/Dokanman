@@ -252,6 +252,7 @@ export async function importFullBackupAction(
         price: String(p.price),
         isQuickAccess: p.isQuickAccess ? String(p.isQuickAccess) : "true",
         icon: typeof p.icon === "string" ? p.icon : null,
+        sortOrder: typeof p.sortOrder === "number" ? p.sortOrder : 0,
         createdAt: p.createdAt ? new Date(String(p.createdAt)) : new Date(),
       });
     }

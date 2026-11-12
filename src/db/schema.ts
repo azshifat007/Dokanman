@@ -29,6 +29,8 @@ export const products = pgTable("products", {
   isQuickAccess: text("is_quick_access").default("true").notNull(),
   // Icon id from src/lib/product-icons.ts; null falls back to guessing by name.
   icon: text("icon"),
+  // Menu position, lowest first; equal values fall back to alphabetical order.
+  sortOrder: integer("sort_order").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

@@ -15,6 +15,8 @@ export interface Product {
   isQuickAccess: string;
   /** Icon id from src/lib/product-icons.ts; null means "guess from the name". */
   icon?: string | null;
+  /** Menu position, lowest first. */
+  sortOrder?: number;
   createdAt: Date | string;
 }
 
